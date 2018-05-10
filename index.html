@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>违章处理</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js" ></script>
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<link rel="stylesheet" href="css/swiper-3.4.2.min.css">
+		<style>
+			html, body{
+		        position: relative;
+		        height: 100%;
+		    }
+		    
+		    .swiper-container {
+		        width: 100%;
+		        height: 2.6rem;
+		    }
+		    .swiper-slide {
+		        background-position: center;
+		        background-size: cover;
+		    }
+		    .swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction{
+		    	bottom: 0rem;
+		    }
+			@media (min-width:1060px){
+			   .contain{
+			   	width:7.4rem;
+			   }
+			   .ban img{
+            	width:7.4rem;
+            	}
+			}
+			.modal {
+			    position: fixed;
+			    left: 0;
+			    right:0;
+			    top: 0;
+			    bottom: 0  ;    
+			    /*background: rgba(0,0,0, .7);*/
+			    z-index: 999;
+			    font-size: 0.26rem;
+			    color: #f2f2f2;
+			    text-align: center;
+			    display: none;
+			}
+			.modal-dialog {
+			    width: 2rem;
+			    margin: 6.6rem auto;
+			}
+			.modal-content {
+			    background: #555;
+			    border:none;
+			    border-radius: 0.2rem;
+			    padding: 0.14rem 0.12rem;
+			    position: relative;
+			}
+			
+			#qb{
+			    background-color: #EE522A;
+			    color: #fff;
+			}
+			
+			.modal-content a{
+			    position: absolute;
+			    top:0rem; 
+			    right: 0.2rem;
+			    font-size: 0.3rem;
+			    color: #ccc;
+			}
+			.sec select{
+				width:1.8rem;
+				color: #999;
+			}
+			img{border:0;max-width:100%;height: auto;}
+			.clear{background:none;border:0;clear:both;display:block;float:none;font-size:0;overflow:hidden;visibility:hidden;width:0;height:0;}
+			a{text-decoration:none;outline:none;}
+			.fl{float:left;}
+			.fr{float:right;}
+			.none{display:none;}
+		</style>
+	</head>
+	<body>
+           	<!-- Swiper -->
+			    <div class="swiper-container">
+			        <div class="swiper-wrapper">
+			            <div class="swiper-slide" style="background-image:url(img/weizhang/1.png)"></div>
+			            <div class="swiper-slide" style="background-image:url(img/weizhang/2.png)"></div>
+			            <div class="swiper-slide" style="background-image:url(img/weizhang/3.png)"></div>
+			        </div>
+			        <!-- Add Pagination -->
+			        <div class="swiper-pagination swiper-pagination-white"></div>
+			        <!-- Add Arrows -->
+			        <!--<div class="swiper-button-next swiper-button-white"></div>
+			        <div class="swiper-button-prev swiper-button-white"></div>-->
+			    </div>
+		<div class="contain">
+		   <section class="nav">
+		   	 <ul>		   	
+		   	 	<li onclick="addcarCheck();" id="addcar">
+		   	 		<img src="img/weizhang/addcar.png" />
+		   	 		<div>添加车辆</div>   
+		   	 	</li>
+		   	 	<li onclick="jieCheck();" id="jie" style="display: none;">
+		   	 		<img src="img/jie.png" />
+		   	 		<div>立即接单</div>
+		   	 	</li>
+		   	 	<li onclick="listCheck();">
+		   	 		<img src="img/weizhang/liebiao_png.png" />
+		   	 		<div>车辆列表</div>   
+		   	 	</li>
+		   	 	<li onclick="daijiaoCheck();">
+		   	 		<img src="img/weizhang/fakuan_png.png" />
+		   	 		<div>罚款代缴</div>
+		   	 	</li>
+		   	 	<li onclick="daibanCheck();">
+		   	 		<img src="img/weizhang/chejian_png.png" />
+		   	 		<div>年检代办</div>
+		   	 	</li>
+		   	 	
+		   	 </ul>
+		   </section>
+		   <section class="nav spe1">
+		   	 <ul>
+		   	 	<li onclick="addCheck();">
+		   	 		<img src="img/weizhang/jiayou_png.png" />
+		   	 		<div>加油服务</div>
+		   	 	</li>
+		   	 	<li onclick="nuocheCheck();">
+		   	 		<img src="img/weizhang/nuoche_png.png" />
+		   	 		<div>一键挪车</div>
+		   	 	</li>
+		   	 	<li onclick="orderCheck();">
+		   	 		<img src="img/weizhang/order.png" />
+		   	 		<div>我的订单</div>
+		   	 	</li>
+		   	 	<li onclick="tuiCheck();">
+		   	 		<img src="img/weizhang/help.png" />
+		   	 		<div>售后退款</div>
+		   	 	</li>
+		   	 </ul>
+		   </section>
+		   <section class="xian">
+		   	  今日限行<span class="big">3</span>和<span class="big">7</span>
+		   	 <span class="right">
+		   	 	明日限行
+		   	 	<img src="img/weizhang/jiantou_png.png" />
+		   	 	<img 
+		   	 </span>
+		   </section>
+		   <section class="zixun">
+		   	 <header>
+		   	 	资讯
+		   	 </header>
+		   	 <section class="message">
+		   	 	<img src="img/weizhang/img.png" />
+		   	 	<p>关于汽车的小消息，关于汽车的小消息，关于汽车的小消息。</p>
+		   	 </section>
+		   	 <section class="message">
+		   	 	<img src="img/weizhang/img.png" />
+		   	 	<p>关于汽车的小消息，关于汽车的小消息，关于汽车的小消息。</p>
+		   	 </section>
+		   	 <section class="message">
+		   	 	<img src="img/weizhang/img.png" />
+		   	 	<p>关于汽车的小消息，关于汽车的小消息，关于汽车的小消息。</p>
+		   	 </section>
+		   </section>
+		    <div class="modal">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <form id="buy-form">
+                 <div class="tips" id="error"></div>
+            </form>
+			      </div>
+			  </div>
+		  </div>
+		</div>
+		<!-- Swiper JS -->
+	    <script src="js/swiper-3.4.2.min.js"></script>
+	
+	    <!-- Initialize Swiper -->
+	    <script>
+	    var swiper = new Swiper('.swiper-container', {
+	        pagination: '.swiper-pagination',
+	        paginationClickable: '.swiper-pagination',
+	        nextButton: '.swiper-button-next',
+	        prevButton: '.swiper-button-prev',
+	        spaceBetween: 30,
+	        effect: 'fade',
+	        autoplay: 3000
+	    });
+	    </script>
+		<script>
+			//获取地址栏
+	    	function UrlSearch()
+				{                 
+				    var name,value;
+				    var str=location.href; //取得整个地址栏
+				    var num=str.indexOf("?")
+				    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+				    var arr=str.split("&"); //各个参数放到数组里
+				    for(var i=0;i < arr.length;i++){
+				        num=arr[i].indexOf("=");
+				        if(num>0){
+				            name=arr[i].substring(0,num);
+				            value=arr[i].substr(num+1);
+				            this[name]=value;
+				        }
+				    }
+				}
+				var Request=new UrlSearch(); //实例化
+				var merId=Request.merId;//获取商户号"M1705041604580002"
+				$.ajax({
+						type:"post",
+						url:"http://192.168.1.141:8080/CarMent/isVIP",
+						data:{
+							"merId":merId
+						},
+						success:function(data){
+							var code=data.code;
+							if(code=="YES"){
+								$("#addcar").css("display","none");
+								$("#jie").css("display","block");
+							}else{
+								$("#addcar").css("display","block");
+								$("#jie").css("display","none");
+							}							
+						},
+		          error:function(){
+			          console.log("操作失败!");
+					}
+				})
+				function addcarCheck(){
+					location.href="addcar.html?merId="+merId;
+				}
+				function listCheck(){
+					location.href="list.html?merId="+merId;
+				}
+				function daijiaoCheck(){
+					location.href="daijiaoindex.html?merId="+merId;
+				}
+				function daibanCheck(){
+				//location.href="daiban.html?merId="+merId;
+					document.getElementsByClassName("modal")[0].style.display="block";
+                    document.getElementById("error").innerHTML="暂未开通";
+                    setTimeout(function(){
+						document.getElementsByClassName("modal")[0].style.display="none";
+					},1000);
+				}
+				function addCheck(){
+				//location.href="add.html?merId="+merId;
+					document.getElementsByClassName("modal")[0].style.display="block";
+                    document.getElementById("error").innerHTML="暂未开通";
+                    setTimeout(function(){
+						document.getElementsByClassName("modal")[0].style.display="none";
+					},1000);
+				}
+				function nuocheCheck(){
+				//location.href="nuoche.html?merId="+merId;
+					document.getElementsByClassName("modal")[0].style.display="block";
+                    document.getElementById("error").innerHTML="暂未开通";
+                    setTimeout(function(){
+						document.getElementsByClassName("modal")[0].style.display="none";
+					},1000);
+				}
+				function orderCheck(){
+					location.href="order.html?merId="+merId;
+				}
+				function tuiCheck(){
+					location.href="tui.html?merId="+merId;
+				}
+				function jieCheck(){
+					location.href="ordernone.html?merId="+merId;
+				}
+		</script>
+       
+	</body>
+</html>

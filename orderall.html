@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>订单详情</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<style>
+		  *{
+		  	margin: 0;
+		  	padding: 0;
+		  }
+		  html{
+		  	font-size: 60px;
+		  }
+		  .order{
+		  	margin-top:0.3rem;
+		  	padding-top:0.06rem;
+		  	width:100%;
+		  	background: #fff;
+		  	font-size: 0.22rem;
+		  	color: #454545;
+		  	letter-spacing: 0.02rem;
+		  	
+		  }
+		  .order .top{
+		  	display: flex;
+		  	margin:0.2rem;
+		  	padding-bottom: 0.14rem;
+		  	border-bottom: 1px dashed #ccc;
+		  }
+		  
+		  .top .orderid{
+		  	flex: 3;
+		  }
+		  .top .zhuangtai{
+		  	flex: 1;
+		  	text-align: right;
+		  	color: #20A29D;
+		  	font-size: 0.2rem;
+		  }
+		  
+		  .qp{
+		  	margin-top:0.2rem;
+		  	padding:0rem 0.2rem 0.2rem 0rem;
+		  	text-align: right;
+		  }
+		  .btns{
+		  	width:1.4rem;
+		  	height: 0.4rem;
+		  	border:1px solid #20A29D;
+		  	border-radius: 0.08rem;
+		  	background: #20A29D;
+		  	color: #efefef;
+		  	font-size: 0.22rem;
+		  	padding:0.04rem 0.18rem;
+		  }
+		  .own{
+		  	border-bottom: 1px dashed #ccc;
+		  	margin-left: 0.2rem;
+		  	margin-right: 0.2rem;
+		  	padding-bottom: 0.14rem;
+		  	display: flex;
+		  }
+		  .img img{
+		  	width:1rem;
+		  	
+		  }
+		  .own .img{
+		  	flex: 1;
+		  }
+		  .own .tit{
+		  	flex: 1;
+		  	padding-top:0.32rem;
+		  }
+		  .own .money{
+		  	flex: 3;
+		  	text-align: right;
+		  	padding-top:0.32rem;
+		  }
+		  .all,.all1{
+		  	padding-bottom: 0.2rem;
+		  	display: flex;
+		  	color: #aaa;
+		  	font-size: 0.2rem;
+		  	padding-left: 0.2rem;
+		  	padding-right: 0.2rem;
+		  }
+		  .all{
+		  	margin-top: 0.1rem;
+		  }
+		  .one{
+		  	flex: 1;
+		  }
+		  .two{
+		  	flex: 1;
+		  	text-align: right;
+		  }
+		  .three{
+		  	color: #aaa;
+		  	font-size: 0.2rem;
+		  }
+		  .four{
+		  	flex: 1;
+		  }
+		  .phone{
+		  
+		  	display: block;
+		  	padding-top:0.26rem;
+		  	padding-bottom: 0.26rem;
+		  	text-align: center;
+		  }
+		  .phone a{
+		  	text-decoration: none;
+		  	color: #333;
+		  }
+		  .phone img{
+		  	width:0.32rem;
+		  	margin-right: 0.1rem;
+		  }
+		  .phone span{
+		  	position: relative;
+		  	top:-0.06rem;
+		  }
+		  .other{
+		  	padding-bottom: 0.3rem;
+		  	font-size: 0.25rem;
+		  	color: #454545;
+		  }
+		  .other .top{
+		  	color: #999;
+		  }
+		  .other .list{
+		  	padding:0rem;
+		  	margin-left: 0.2rem;
+		  	margin-right: 0.2rem;
+		  	border-bottom: 1px dashed #ccc;
+		  	letter-spacing: 0.02rem;
+		  }
+		  .other li{
+		  	margin-bottom: 0.1rem;
+		  	font-size: 0.24rem;
+		  	color: #454545;
+		  }
+		</style>
+		<link href="css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+	   <div class="contain">
+	     <div class="order">
+	     	<section class="top">
+	     		<header class="orderid">订单编号：<span id="ordernum"></span></header>
+	     		<span class="zhuangtai" id="orderstate"></span>
+	     	</section>
+	     	<section class="own">
+	     		<div class="img"><img src="img/1.png" /></div>
+	     		<div class="tit">违章处理</div>
+	     		<div class="money">实付：￥<span id="moneyall"></span></div>
+	     	</section>
+	     	<section class="qp">
+	     		<input class="btns" type="button" value="申请退款" onclick="tuiCheck();"/>
+	     	</section>
+	     	<section class="all">
+	     		<div class="one">罚款金额：￥<span id="moneyclf"></span></div>
+	     		<div class="three">服务费：￥<span>30.00</span></div>	     		
+	     	</section>
+	     	<section class="all1">
+	     		<div class="four">处理费：￥<span id="serviceprice"></span></div>
+	     		<div class="two">处理期限：<span>7个工作日内</span></div>	     		
+	     	</section>
+	     	
+	     </div>
+	     <section class="order phone">
+	     	<a href="tel:4008732911">
+	     	<img src="img/tel.png" />			<span>拨打电话</span>
+	        </a>
+	     </section>
+	     
+	   </div>
+	   <div class="order other">
+	     	<section class="top">
+	     		<header class="orderid">订单详情</header>
+	     		
+	     	</section>
+	     	<section class="list">
+	     		<ul>
+	     			<li>订单号：<span id="ordernum1"></span></li>
+	     			<li>下单时间：<span id="starttime"></span></li>
+	     			<li>违规原因：<span id="cause"></span></li>
+	     			<li>扣除分值：<span id="score"></span></li>
+	     			<li>数量：<span>1</span></li>
+	     			<li>总价：￥<span id="moneyall1"></span></li>
+	     		</ul>
+	     	</section>
+	   </div>
+	   <script>
+		//获取地址栏
+    	function UrlSearch()
+			{
+			    var name,value;
+			    var str=location.href; //取得整个地址栏
+			    var num=str.indexOf("?")
+			    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+			    var arr=str.split("&"); //各个参数放到数组里
+			    for(var i=0;i < arr.length;i++){
+			        num=arr[i].indexOf("=");
+			        if(num>0){
+			            name=arr[i].substring(0,num);
+			            value=arr[i].substr(num+1);
+			            this[name]=value;
+			        }
+			    }
+			}
+			var Request=new UrlSearch(); //实例化
+			var merId=Request.merId;
+			var ordernum=Request.ordernum;
+			
+			$.ajax({
+						type:"post",
+						url:"http://192.168.1.141:8080/CarMent/orderRall",
+						data:{
+							"ordernum":ordernum
+						},
+						success:function(data){
+							var ordernum=data.ordernum;
+							var moneyall=data.moneyall;
+							var orderstate=data.orderstate;
+							var moneyclf=data.moneyclf;
+							var starttime=data.starttime;
+							var cause=data.cause;
+							var score=data.score;
+							var serviceprice=data.servicePrice-30;
+
+							$("#ordernum").html(ordernum);
+							if(orderstate==0){
+								$("#orderstate").html("未接单");
+							}else if(orderstate==1){
+								$("#orderstate").html("处理中");
+							}else if(orderstate==2){
+								$("#orderstate").html("待审核");
+							}else if(orderstate==3){
+								$("#orderstate").html("审核失败");
+							}else{
+								$("#orderstate").html("交易成功");
+							}
+							$("#moneyall").html(moneyall);
+							$("#moneyclf").html(moneyclf);
+							$("#ordernum1").html(ordernum);
+							$("#starttime").html(starttime);
+							$("#cause").html(cause);
+							$("#score").html(score);
+							$("#moneyall1").html(moneyall);
+							$("#serviceprice").html(serviceprice);
+						},
+		          error:function(){
+			          console.log("操作失败!");
+					}
+					})
+			function tuiCheck(){
+				var moneyall=$("#moneyall").html();
+				$.ajax({
+						type:"post",
+						url:"http://192.168.1.141:8080/CarMent/orderRefund",
+						data:{
+							"merId":merId,
+							"ordernum":ordernum,
+							"moneyall":moneyall
+						},
+						success:function(data){
+							console.log("退款成功!");
+							location.href="tui.html?merId="+merId;
+						},
+		          error:function(){
+			          console.log("操作失败!");
+					}
+					})
+			}
+	</script>
+	</body>
+</html>

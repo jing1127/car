@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>加油服务</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js" ></script>
+				<link rel="stylesheet" href="css/wxzf.css" />
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<link rel="stylesheet" href="css/modal.css" />
+		<style>
+			/*模态框*/
+			.contain1{
+				background: #f2f2f2;
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom:0;
+				z-index: 999;
+				padding-top:0.26rem;
+				font-size: 0.25rem;
+				color: #454545;
+				font-family: "黑体";
+				letter-spacing: 0.01rem;
+				display: none;
+			}
+			.contain1 .addid{
+				background: #fff;
+				padding:0.2rem;
+			}
+			.addid input{
+				margin-left: 0.5rem;
+				height: 0.3rem;
+				border: none;
+				outline: none;
+				width:4rem;
+				font-size: 0.22rem;
+				font-family: "黑体";
+			}
+			.tipt{
+				padding:0.2rem;
+				font-size: 0.22rem;
+				color: #aaa;
+			}
+			.addbt{
+				margin-top:0.6rem;
+				text-align: center;
+			}
+			.addbt .btn{
+				border: none;
+				background: #20A29D;
+				border-radius: 0.1rem;
+				font-size: 0.32rem;
+				color: #efefef;
+				width:5rem;
+				height: 0.66rem;
+				font-family: "黑体";
+			}
+			.clos{
+				margin-bottom: 0.2rem;
+				margin-right: 0.3rem;
+				text-align: right;
+				color: #323232;
+				cursor: pointer;
+			}
+			.hidd{
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="contain">
+			<section class="addy" onclick="addCheck();"> 
+				<img src="img/add/ka_png.png" />
+				<span class="titl" id="add">添加油卡</span>
+				<input type="hidden" id="tel" />
+			</section>
+			<section class="main">
+				<div>加油卡充值</div>
+			</section>
+			<section class="buy" id="buy">
+				<input type="radio" class="hidd" value="49.5" id="one" name="mon" checked="" />
+				<label for="one" class="highlight">
+					<div><span>50</span>元</div>
+					<div>售价：49.5元</div>
+				</label>
+				<input type="radio" class="hidd" value="99" id="two" name="mon" />
+				<label for="two">
+					<div><span>100</span>元</div>
+					<div>售价：99元</div>
+				</label>
+				<input type="radio" class="hidd" value="198" id="three" name="mon" />
+				<label for="three">
+					<div><span>200</span>元</div>
+					<div>售价：198元</div>
+				</label>
+				<input type="radio" class="hidd" value="297" id="four" name="mon" />
+				<label for="four">
+					<div><span>500</span>元</div>
+					<div>售价：495元</div>
+				</label>
+			</section>
+			<section class="agree">
+	   	  		<img id="no" src="img/yuan_png.png" onclick="selec();" />
+	   	  		<img id="yes" src="img/xuanzhong.png" onclick="selec();" />
+	   	  		<span>已阅读并同意 <a href="#">&nbsp;《加油卡充值服务协议》</a></span>
+	   	  		<br /><input class="btn" id="btn1" type="button" value="确认支付" />
+	   	   </section>
+	   	    <div class="contain1" id="add1">
+	   	    	<section class="clos" onclick="closCheck();">
+	   	    		关闭
+	   	    	</section>
+				<section class="addid">
+					<span>加油卡号</span>
+					<input type="text" placeholder="请输入中石化或中石油加油卡卡号" id="numid" />
+				</section>
+				<section class="tipt">
+					请仔细核对加油卡卡号，支持中石化和中石油个人记名卡
+				</section>
+				<section class="addid">
+					<span>联系电话</span>
+					<input type="text" id="phone" placeholder="请输入联系电话" />
+				</section>
+				<section class="addbt">
+					<input type="button" class="btn" value="确认添加" onclick="addkaCheck();" />
+				</section>
+			</div>
+		</div>
+
+	   	  <script>
+	   	  	function selec(){
+		   		var no=document.getElementById("no");
+		   	  	var yes=document.getElementById("yes");
+		   	  	if(yes.style.display=="block"){
+		   	  		yes.style.display="none"; 
+		   	  		no.style.display="block";
+		   	  	}else{
+		   	  		yes.style.display="block";
+		   	  		no.style.display="none";
+		   	  	}
+		   	}	  
+	   	  	function addCheck(){
+	   	  		var add1=document.getElementById("add1");
+	   	  		add1.style.display="block";
+	   	  	}
+	   	  	function closCheck(){
+	   	  		var add1=document.getElementById("add1");
+	   	  		add1.style.display="none";
+	   	  	}
+	   	  	function addkaCheck(){
+	   	  		var add1=document.getElementById("add1");
+	   	  		var numid=document.getElementById("numid");
+	   	  		var phone=document.getElementById("phone");
+	   	  		var add=document.getElementById("add");
+	   	  		var tel=document.getElementById("tel");
+	   	  		if(!(numid.value=="")&&!(phone.value=="")){
+	   	  			add.innerHTML=numid.value;
+		   	  		tel.value=phone.value;
+		   	  		add1.style.display="none";
+	   	  		}else{
+	   	  			add.innerHTML="添加油卡";
+	   	  			add1.style.display="none";
+	   	  		}
+	   	  	}
+	   	  	$("label").click(function(){
+			$(this).addClass("highlight")
+				   .siblings(".highlight").removeClass("highlight");
+		    });
+	   	  </script>
+	</body>
+</html>

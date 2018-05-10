@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>退款列表</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<link rel="stylesheet" href="mui/mui.min.css" />
+		<style>
+		  *{
+		  	margin: 0;
+		  	padding: 0;
+		  }
+		  html{
+		  	font-size: 60px;
+		  }
+		  a{
+		  	text-decoration: none;
+		  	color: #333;
+		  }
+		  .order{
+		  	margin:0 auto;
+		  	margin-top:0.3rem;
+		  	border:1px solid #dedede;
+		  	box-shadow:0 0 8px #ccc;
+		  	width:5.8rem;
+		  	background: #fff;
+		  	font-size: 0.22rem;
+		  	color: #454545;
+		  	letter-spacing: 0.02rem;
+		  	
+		  }
+		  .order .top{
+		  	display: flex;
+		  	margin:0.2rem;
+		  	padding-bottom: 0.14rem;
+		  	border-bottom: 1px dashed #ccc;
+		  }
+		  
+		  .top .orderid{
+		  	flex: 3;
+		  }
+		  .top .zhuangtai{
+		  	flex: 1;
+		  	text-align: right;
+		  	color: #20A29D;
+		  	font-size: 0.2rem;
+		  }
+		  .list{
+		  	padding: 0;
+		  	padding-left: 0.2rem;
+		  }
+		  .list li{
+		  	margin-bottom: 0.18rem;
+		  }
+		  .list .spe{
+		  	display: flex;
+		  	margin-right: 0.2rem;
+		  	border-bottom: 1px dashed #ccc;
+		  }
+		  .spe div{
+		  	padding:0;
+		  	flex: 1;
+		  }
+		  .spe .con{
+		  	border: none;
+		  	text-align: right;
+		  	color: #FEAC36;
+		  }
+		  .qp{
+		  	padding:0rem 0.2rem 0.2rem 0rem;
+		  	text-align: right;
+		  
+		  }
+		  .yi .btns{
+		  	
+		  	border:1px solid #20A29D;
+		  	border-radius: 0.08rem;
+		  	width:1.4rem;
+		  	height: 0.34rem;
+		  	font-size: 0.22rem;
+		  	background: #fff;
+		  	color: #20A29D;
+		  	padding:0.02rem 0.16rem;
+		  }
+		  .more{
+		  	display: flex;
+		  	padding-top:0.02rem;
+		  	padding-left: 0.2rem;
+		  }
+		  .left{
+		  	flex: 1;
+		  }
+		  .left img{
+		  	
+		  	margin-right: 0.1rem;
+		  	width:0.28rem;
+		  }
+		  .left span{
+		  	position: relative;
+		  	top:-0.04rem;
+		  }
+		  .qb{
+		  	flex: 1;
+		  	position: relative;
+		  }
+		  .none{
+				padding-top: 2.5rem;
+				text-align: center;
+				display: none;
+			}
+			.none img{
+				width:2.4rem;
+			}
+		</style>
+		<style>
+	    [v-cloak] {
+			        display: none;
+			    }
+		</style>
+		<link href="css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body class="refresh">
+		<div class="integral_ul" >
+	    <div class="contain" v-cloak v-for="item6 in refundList">
+	      <div class="order">
+	     	<section class="top">
+	     		<header class="orderid">订单编号：<span>{{item6.ordernum}}</span></header>
+	     		
+	     	</section>
+	     		<section class="list">
+	     		<ul>
+	     			<li>下单时间：<span>{{item6.starttime}}</span></li>
+	     			<li>违规原因：<span>{{item6.cause}}</span></li>
+	     			<li class="spe">
+	     				<div>扣除分值：<span>{{item6.score}}</span></div>
+	     				<div class="con">
+	     					退款金额：￥<span>{{item6.moneyall}}</span>
+	     				</div>
+	     			</li>
+	     		</ul>
+	     	</section>
+	     	<section class="more">
+	     		<div class="left">
+	     			<img src="img/tui.png" /><span>退款成功</span>
+	     		</div>
+	     		<section class="qp">
+	     			<div class="yi">
+	     				<a href="see.html?ordernum={{item6.ordernum}}"><input class="btns" type="button" value="查看详情" /></a>
+	     			</div>
+	     		</section>
+	     	</section>
+	     	
+	     </div>
+	   </div>
+	  </div>
+	   <section class="none" id="none">
+				<img src="img/tuinone.png" /> 
+		</section>  
+		<script type="text/javascript" src="mui/mui.min.js" ></script>
+				<script type="text/javascript" src="js/vue.min.js"></script>
+	   <script>
+			//获取地址栏
+	    	function UrlSearch()
+				{
+				    var name,value;
+				    var str=location.href; //取得整个地址栏
+				    var num=str.indexOf("?")
+				    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+				    var arr=str.split("&"); //各个参数放到数组里
+				    for(var i=0;i < arr.length;i++){
+				        num=arr[i].indexOf("=");
+				        if(num>0){
+				            name=arr[i].substring(0,num);
+				            value=arr[i].substr(num+1);
+				            this[name]=value;
+				        }
+				    }
+				}
+				var Request=new UrlSearch(); //实例化
+				var merId="M1707021142530259";//获取商户号
+				
+				var vms = new Vue({
+			        el: '.contain',
+			        data: {
+			            refundList: [],
+			            merId:merId,
+			            lastIndex:0,
+			        }
+			    });
+//上拉加载下拉刷新
+				 mui.init({
+			        pullRefresh: {
+			            container: ".refresh",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+			            down: {
+			                //height: 50,//可选,默认50.触发下拉刷新拖动距离,
+			                contentdown: "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+			                contentover: "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+			                contentrefresh: "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+			                auto: false,//可选,默认false.首次加载自动上拉刷新一次
+			                callback: pulldownRefresh
+			            },
+			            up: {
+			                auto: true,
+			                contentrefresh: "正在加载...",
+			                contentnomore: '没有更多数据了',
+			                callback: pullupRefresh
+			            }
+			        } 
+			    });
+			
+			    function pulldownRefresh() {
+			        $.ajax({
+			            url: "http://192.168.2.174:8080/ssm/RefundList",
+			            type: "post",
+			            data: {
+			                 "merId":merId,
+			                 "id":0
+			            },
+			            dataType: 'json',		           
+			            success: function (data) {
+			            	var refund=data.refundList;
+							if(refund==0){
+								$("#none").css("display","block");
+							}else{
+								console.log(refund);
+								vms.refundList = data.refundList;	
+								vms.lastIndex = vms.refundList[vms.refundList.length-1].id;
+			                    alert("id为："+ JSON.stringify(vms.refundList[vms. refundList.length-1].id));
+							}    
+							alert("刷新完成");
+			                mui('.refresh').pullRefresh().endPulldownToRefresh(true);
+			                   mui('.refresh').pullRefresh().refresh(true);
+//			                     mui('.refresh').pullRefresh().endPullupToRefresh(false);
+			            },
+			            error: function (xhr, type) {
+			                alert("出错了");
+			            }
+			        });
+			    }
+			    function pullupRefresh() {
+			        $.ajax({
+			            url: "http://192.168.2.174:8080/ssm/RefundList",
+			            type: "post",
+			            data: {
+			                "merId":merId,
+			                "id":vms.lastIndex
+			            }, 
+			            dataType: 'json',
+			            async: true,
+			            success: function (data) {
+			            	console.log(data.refundList);
+			                vms.refundList=vms.refundList.concat(data.refundList);
+			                vms.lastIndex = vms.refundList[vms.refundList.length-1].id;
+			                alert("id为："+ JSON.stringify(vms.refundList[vms.refundList.length-1].id));
+			                if (data.refundList.length < 5){
+			                // 如果没有更多数据了，则关闭上拉加载
+			                    mui('.refresh').pullRefresh().endPullupToRefresh(true);
+			                   }
+			                else{
+			                // 如果有更多数据，则继续
+			                    mui('.refresh').pullRefresh().endPullupToRefresh(false);
+			                    
+			                   }
+			            },
+			            error: function (xhr, type) {
+			                alert("出错了")
+			            }
+			        });
+			    }
+			    
+			    mui('.mui-scroll-wrapper').scroll({deceleration: 0.0005});
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+
+				
+				
+				
+				
+				
+				
+				
+				
+//				$.ajax({
+//						type:"post",
+//						url:"http://192.168.1.141:8080/CarMent/RefundList",
+//						data:{
+//							"merId":merId
+//						},
+//						dataType: "json",
+//						success:function(data){
+//							var refund=data.refundList;
+//							if(refund==0){
+//								$("#none").css("display","block");
+//							}else{
+//								var vms = new Vue({
+//								el : ".contain",
+//								data : {
+//									data0 : data.refundList
+//								}
+//							})
+//							}
+//							//alert(JSON.stringify(data.orderList));
+//							
+//							return;
+//						},
+//		          error:function(){
+//			          console.log("操作失败!");
+//					}
+//				})
+		</script>	  
+	</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>待处理</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="mui/mui.min.js" ></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/tabs.js" ></script>
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<link rel="stylesheet" href="mui/mui.min.css" />
+		<style>
+			ul{width:100%;list-style: none;}
+	        *{margin: 0;padding: 0;}
+		    html{	font-size: 60px;width:100%;height: 100%;}
+		    body{width:100%;height: 100%;position: relative;}
+		    a{text-decoration: none;color: #333;}
+			.contain{font-size:15px;width:100%;}
+			.heads{z-index: 999;background: #fff;padding:15px;display: flex;border-bottom: 1px solid #ccc;}
+			.heads a{text-decoration: none;}
+			.ordernone,.orderown,.orderok{padding:2px;flex: 1;border-top: 1px solid #20A29D;border-bottom: 1px solid #20A29D;text-align: center;color: #20A29D;cursor: pointer;}
+			.ordernone{border-left: 1px solid #20A29D;}
+			.orderok{border-right: 1px solid #20A29D;}
+			.highlight{background: #20A29D;color: #fefefe;}
+			.contnone,.contown,.contok{padding:0.26rem;padding-bottom: 0;}
+			.listnone{margin:0.24rem;border-bottom: 1px solid #ccc;box-shadow:0 0 8px #ccc;padding:0.26rem;padding-bottom: 0rem;background: #fff;font-family: "黑体";}
+			.top{display: flex;border-bottom: 1px dashed #ccc;} 
+			.top .orderid{flex: 3;}
+			.top .zhuangtai{flex: 1;text-align: right;color: #20A29D;font-size: 0.22rem; }
+			/*待接单头部内容*/
+			.headnone{padding-bottom: 0.12rem;display: flex;font-size: 0.22rem;letter-spacing: 0.02rem;color: #454545;}
+			.img img{width:1rem;  	}
+			.headnone .img{flex: 2;}
+			.headnone .tit{flex: 3;padding-top:0.32rem;}
+			.headnone .money{flex: 3;text-align: right;padding-top:0.32rem;color: #ff9000;font-size: 0.28rem;}
+			.mainnone{padding-top: 0.18rem;padding-bottom: 0.14rem;border-bottom: 1px dashed #ccc;font-size: 0.22rem;letter-spacing: 0.02rem;line-height: 0.44rem;color: #454545;}
+			.footown{margin:0.2rem 0rem 0.1rem 0rem;padding-bottom: 0.08rem;text-align: right;}
+			.footown .btnown{background: #fff;padding:0.02rem 0.16rem;border-radius: 0.1rem;border: 1px solid #20A29D;width:1.4rem;color: #20A29D;font-size: 0.22rem;}
+			.footown .button1{padding:0.04rem 0.16rem;width:1.4rem;font-size: 0.22rem;background: #20A29D;color: #fdfdfd;border: none;border-radius: 0.1rem;}
+			.spe{display: flex;}
+			.spe div{flex: 1;}
+			.spe .spemoney{text-align: right;}
+			.spe .spechil{font-size: 0.28rem;}
+			
+			.none{padding-top: 2.5rem;text-align: center;display: none;}
+			.none img{width:2.4rem;}
+			.mui-scroll-wrapper{top:60px;}
+			.mui-scroll-wrapper,.mui-table-view-chevron{background: #efefef4;}
+			/*.mt{margin-top:-20px; position: absolute;left: 0;right: 0;top: 0;bottom: 0; background: rgba(0,0,0, 0.1); z-index: 999;display: none;}*/
+			  .mt{width:100%;height:100%; position: absolute;left: 0;top: 0;background: rgba(0,0,0, 0.5); z-index: 999;display: none;}  
+			  /*.mt-dialog {width: 260px;margin: 150px auto;}*/
+			  .mt-dialog {position:absolute;width:260px;height:182px;top:50%;left:50%;margin:-182px 0 0 -130px;}
+			  .mt-content { background:  #fafafa;   border-radius: 6px; padding: 16px;position:relative; top:100px;}
+			  .mt-content h4 { margin-top:6px;margin-bottom: 40px;font-family:helvetica;font-size: 16px;color: #20A29D;padding-bottom: 16px; border-bottom: 1px solid #20A29D;}
+			  .mt-content p{ font-size: 12px; color: #777;}
+			  .yi{margin-top:20px;display: flex;}
+			  .yi div{flex: 1;text-align: center;font-size: 13.8px;}
+			  .yi .btn2,.yi .btn3{padding:4px 20px;width:100px;}
+			  .yi .btn2{background: #fafafa;border: 1px solid #888;color: #666;}
+			  .yi .btn3{border:1px solid #20A29D;color: #20A29D;}
+		</style>
+		<style>
+	    [v-cloak] {
+			        display: none;
+			    }
+		</style>
+	</head>
+	<body>
+		<div class="contain">
+	   	 	<header class="heads">
+	   	 		<div class="ordernone" onclick="tabs();"><div  id="ordernone">待接单</div></div>
+	   	 		<div class="orderown highlight" onclick="tab1();"><div id="orderown">待处理</div></div>
+	   	 		<div class="orderok" onclick="tab2();"><div id="orderok">已完成</div></div>
+	   	 	</header>
+		
+		<div class="index_box">
+        <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+            <div class="mui-scroll">
+              <ul class="mui-table-view-chevron">
+              	<li class="contain" v-cloak v-for="info in infos">
+              	 <section class="listnone">
+				<section class="top">
+					<header class="headnone">
+						订单编号：<span id="ordernum">{{info.ordernum}}</span>
+					</header>
+					<span class="zhuangtai">{{ info.orderstate==1?"处理中":"待审核" }}</span>
+				</section>
+				
+				<section class="mainnone">
+					<ul>
+		     			<li>接单时间：<span>{{info.acceptordertime}}</span></li>
+		     			<li>处理期限：<span>3个工作日内</span></li>
+		     			<li>违规原因：<span>{{info.cause}}</span></li>
+		     			<li class="spe">
+		     				<div>扣除分值：<span>{{info.score}}</span></div>
+		     				<div class="spemoney">合计：￥<span class="spechil">{{info.money}}</span></div>
+		     			</li>
+					</ul>
+				</section>
+				<section class="footown">
+					<a href="succ.html?ordernum={{info.ordernum}}&merId={{merId}}"><input type="button" class="button1" id="button1" value="回执上传" /></a>
+					<input type="button" class="btnown" id="btnown" value="取消订单" @click="delGo($index)" />
+				</section>
+			</section>
+              	</li>
+                
+              </ul>
+            </div>
+          </div>
+    </div>
+    <section class="none" id="none">
+				<img src="img/order.png" /> 
+	</section>  
+     <input type="hidden" id="hide" />
+   <div class="mt" id="modal1">
+						    <div class="mt-dialog">
+						        <div class="mt-content">
+						            <h4>确认要取消订单吗?</h4>
+						                <div class="mone">
+						                    
+						                </div>
+						                <p>注意：取消订单后不可恢复</p>
+						                <div class="yi">
+						                	
+						                	<div><input type="button" class="btn2" value="取消" id="close" @click="close()" /></div>
+						                	<div><input type="button" class="btn3" value="确定" id="qb" @click="delCheck()" /></div>
+						                </div>
+						                
+						        </div>
+						    </div>
+	</div>
+    </div>
+		
+		
+		<script>
+			//获取地址栏
+	    	function UrlSearch()
+				{
+				    var name,value;
+				    var str=location.href; //取得整个地址栏
+				    var num=str.indexOf("?")
+				    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+				    var arr=str.split("&"); //各个参数放到数组里
+				    for(var i=0;i < arr.length;i++){
+				        num=arr[i].indexOf("=");
+				        if(num>0){
+				            name=arr[i].substring(0,num);
+				            value=arr[i].substr(num+1);
+				            this[name]=value;
+				        }
+				    }
+				}
+				var Request=new UrlSearch(); //实例化
+				var merId=Request.merId;//获取商户号
+				$(function(){
+			      	var lastIndex=0;
+			         var vm=new Vue({
+			             el:".contain",
+			             data:{
+			             	 merId:merId,
+			                 infos:[],
+			             },
+				        methods : {		
+				        				delGo : function(index){
+												$("body").css("overflow-y","hidden");
+												$("body").css("position","fixed");
+												$(".mt").css("display","block");
+												mui('#refreshContainer').pullRefresh().setStopped(true);	
+												console.log(index);
+												$("#hide").val(index);
+										},
+										close : function(){
+												$(".mt").css("display","none");
+												$("body").css("overflow-y","auto");
+												$("body").css("position","relative");								
+		                                      	mui('#refreshContainer').pullRefresh().setStopped(false);								
+										},
+				        				delCheck : function(){
+				        					var num=$("#hide").val();
+//				        					console.log(num);
+										    var ordernum = vm.infos[num].ordernum;
+										
+										$.ajax({
+											type:"post",
+											url:"http://http://116.62.153.14:80/CarMent/stateUpdate",
+											data:{
+												"merId":merId,
+												"ordernum":ordernum
+											},
+											dataType: "json",
+											success:function(data){
+												
+												vm.infos.splice(num,1);
+												$(".mt").css("display","none");
+												$("body").css("overflow-y","auto");
+												$("body").css("position","relative");								
+								                mui('#refreshContainer').pullRefresh().setStopped(false);
+												//alert(JSON.stringify(data.orderList));
+												console.log("取消成功!");
+												//window.location.reload();
+												
+											},
+											error:function(){
+												console.log("操作失败!");
+											}
+										});
+									}									
+									
+								}
+			         });
+			        mui.init({
+			            swipeBack: false,
+			            pullRefresh:{
+			                container:"#refreshContainer",
+			                down:{
+			                    style:"circle",
+			                    callback:pulldownRefresh
+			                },
+			                up:{
+			                	auto:false,
+			                    height:"50px",
+			                    contentrefresh:"正在加载...",
+			                    contenttnomore:"没有更多数据了",
+			                    callback:pullupRefresh
+			                }
+			            }
+			        });
+			        function pulldownRefresh(){
+			            $.ajax({
+			                url:"http://116.62.153.14:80/CarMent/todispose",
+			                data:{
+			                    merId:merId,
+			                    id: 0
+			                },
+			                type:"POST",
+			                dataType:"json",
+			                success:function(data){ 
+			                	vm.merId=data.merId;
+			                    vm.infos=data.orderList;
+			                    lastIndex = vm.infos[vm.infos.length-1].id;
+						        console.log("id为："+ JSON.stringify(vm.infos[vm.infos.length-1].id));
+							}
+			            });  
+			            mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+			            mui.toast('下拉刷新成功');
+			            mui('#refreshContainer').pullRefresh().refresh(true);
+			        };
+			        function pullupRefresh(){//http:192.168.2.174:8080/ssm/RefundList
+			            $.ajax({
+			                url:"http://116.62.153.14:80/CarMent/todispose",
+			                type:"POST",
+			                data:{
+			                	merId:merId,
+			                    id:lastIndex
+			                },
+			                dataType:"json",
+			                success:function(data){ 
+								vm.merId=data.merId;
+			                    vm.infos=vm.infos.concat(data.orderList);
+			                    lastIndex = vm.infos[vm.infos.length-1].id;
+						        console.log("id为："+ JSON.stringify(vm.infos[vm.infos.length-1].id));
+			                    if(data.orderList<5){
+			                        // this.endPullupToRefresh(true);
+			                        mui('#refreshContainer').pullRefresh().endPullupToRefresh(true);
+			                    }else{
+			                        // this.endPullupToRefresh(false);
+			                        mui('#refreshContainer').pullRefresh().endPullupToRefresh(false);
+			                    }
+			                }
+			            });
+			
+			        };
+			        $(".index_box").ready(function(){
+			          	alert("12");
+			              $.ajax({
+			                  url:"http://116.62.153.14:80/CarMent/todispose",
+			                  type:"POST",
+			                  data:{
+			                  	merId:merId,
+			                  	id:0
+			                  },
+			                  dataType:"json",
+			                  success:function(data){
+			                  	if(data.orderList==0){
+			                		$("#none").css("display","block");
+			                		$(".index_box").css("display","none");
+			                	}else{
+			                      vm.infos=data.orderList;
+			                       lastIndex = vm.infos[vm.infos.length-1].id;
+			                      }
+			                  }
+			            });
+			         });
+				});
+		
+
+		</script>
+	
+	   	  
+	</body>
+	
+</html>

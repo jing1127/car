@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>车辆列表</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<link rel="stylesheet" href="css/open.css" />
+		<style>
+			.contain{
+				font-family: "黑体";
+				font-size: 0.22rem;
+				color: #454545;
+				letter-spacing: 0.01rem;
+			}
+			.contain .headopen{
+				margin-top:0.25rem;
+				margin-bottom: 0.25rem;
+				background: #fff;
+				padding: 0.26rem;
+				padding-bottom: 0.21rem;
+			}
+			.headopen .top{
+				display: flex;
+				padding-bottom: 0.2rem;
+				border-bottom: 1px solid #dfdfdf;
+			}
+			.headopen .open,.tel span{
+				flex: 1;
+				
+			}
+			.headopen .tit{
+				flex: 4;
+			}
+			.tel{
+				margin-top:0.2rem;
+				display: flex;
+				color: #ccc;
+			}
+			.tel input{
+				flex: 3;
+				border: none;
+				outline: none;
+				font-size: 0.22rem;
+				font-family: "黑体";
+			}
+			.mainopen{
+				margin-bottom: 0.25rem;
+				padding:0.26rem;
+				background: #fff;
+				
+			}
+			.mainopen img{
+				position: relative;
+				top:0.03rem;
+			}
+			.mainopen .time,.mainopen .address{
+				margin-bottom: 0.2rem;
+				color: #999;
+				font-size: 0.24rem;
+				letter-spacing: 0.02rem;
+			}
+			.time img{
+				width:0.22rem;
+			}
+			.address img{
+				width:0.16rem;
+			}
+			.mainopen .why{
+				margin-bottom: 0.14rem;
+				line-height: 0.39rem;
+			}
+			.mainopen .address{
+				padding-bottom: 0.22rem;
+				border-bottom: 1px dashed #dfdfdf;
+			}
+			.mainopen ul{
+				display: flex;
+			}
+			.mainopen li{
+				flex: 1;
+			}
+			.mainopen .two{
+				text-align: center;
+			}
+			.mainopen .three{
+				text-align: right;
+				
+			}
+			.mainopen a{
+				color: #20A29D;
+				text-decoration: none;
+			}
+			.none{
+				padding-top: 1.5rem;
+				text-align: center;
+				display: none;
+			}
+			.none img{
+				width:2.4rem;
+			}
+		</style>
+		<style>
+	    [v-cloak] {
+			        display: none;
+			    }
+		</style>
+	</head>
+	<body>
+		<div class="contain">
+			<header class="headopen">
+				<section class="top">
+					<span class="tit">新违章消息通知及年检提醒服务</span>
+					<span class="open">
+						<input class='tgl' id='cb1' type='checkbox'>
+    					<label class='tgl-btn' for='cb1'></label>
+					</span>
+				</section>
+				<section class="tel">
+					<span>手机号码</span>
+					<input type="text" placeholder="请输入手机号码"  />
+				</section>
+			</header>
+			<section class="mainopen" v-cloak v-for="itemall in datall">
+				<article class="time">
+					<img src="img/time.png" />
+					<span>{{itemall.delrtime}}</span>
+				</article>
+				<article class="why">
+					{{itemall.cause}}
+				</article>
+				<article class="address">
+					<img src="img/address.png" />
+					<span>{{itemall.address}}</span>
+				</article>
+				<ul>
+					<li>
+						<span>罚款</span>
+						<span>{{itemall.money}}</span>
+					</li>
+					<li class="two">
+						<span>扣分</span>
+						<span>{{itemall.score}}</span>
+					</li>
+					<li>
+						{{itemall.merId}}
+					</li>
+					<li class="three" >
+						<a href="daijiao.html?merId={{merId}}&id={{itemall.id}}">
+						<span>去处理</span>
+						</a>
+					</li>
+				</ul>
+			</section>
+			<section class="none" id="none">
+				<img src="img/none.png" /> 
+			</section>
+		</div>
+		<script>
+			//获取地址栏
+	    	function UrlSearch()
+				{
+				    var name,value;
+				    var str=location.href; //取得整个地址栏
+				    var num=str.indexOf("?");
+				    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+				    var arr=str.split("&"); //各个参数放到数组里
+				    for(var i=0;i < arr.length;i++){
+				        num=arr[i].indexOf("=");
+				        if(num>0){
+				            name=arr[i].substring(0,num);                  
+				            value=arr[i].substr(num+1);
+				            this[name]=value;
+				        }
+				    }
+				}
+				var Request=new UrlSearch(); //实例化
+				var merId=Request.merId;
+				var carnum=Request.carnum;
+				var nodispose=Request.nodispose;
+				if(nodispose==0){
+					$(".none").css("display","block");
+					$(".mainopen").css("display","none");
+				}else{
+					$.ajax({
+						type:"post",
+						url:"http://192.168.1.141:8080/CarMent/delrList",
+						data:{
+							"merId":merId,
+							"carnum":carnum
+						},
+						success:function(data){
+							//alert(JSON.stringify(data.orderList));
+								var vmall = new Vue({
+								el : ".mainopen",
+								data : {
+									datall : data.delrlist,
+									merId : data.merId
+								}
+							})
+								return;
+						},
+		          error:function(){
+			          console.log("操作失败!");
+					}
+				})
+				}
+		</script>
+	</body>
+</html>

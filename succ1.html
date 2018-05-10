@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title></title>
+		
+		<style>
+		body{
+			background: #fff;
+		}
+    	.success .main{
+    		margin-top:30%;
+    		width:100%;
+    		font-family: "黑体";
+    		text-align: center;
+    		color: #454545;
+    	}
+    	.main img{
+    		margin-top: 30px;
+    		margin-bottom: 32px;
+    		width:66px;
+    	}
+    	.main input{
+    		border: none;
+    		outline: none;
+    		background: #fff;
+    		margin-top: 40px;
+    		color: #20A29D;
+    		font-size: 16px;
+    	}
+		</style>
+	</head>
+	<body>
+		<div class="success">
+		<div class="main">
+			<img src="img/1(3).png" /> 
+			<header>
+			上传成功，等待系统审核...
+			</header>
+			<input type="button" value="返回首页" onclick="goindex();" /> 
+		</div>
+	</div>
+	<script>
+		//获取地址栏
+    	function UrlSearch()
+			{
+			    var name,value;
+			    var str=location.href; //取得整个地址栏
+			    var num=str.indexOf("?")
+			    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+			    var arr=str.split("&"); //各个参数放到数组里
+			    for(var i=0;i < arr.length;i++){
+			        num=arr[i].indexOf("=");
+			        if(num>0){
+			            name=arr[i].substring(0,num);
+			            value=arr[i].substr(num+1);
+			            this[name]=value;
+			        }
+			    }
+			}
+			var Request=new UrlSearch(); //实例化
+			var merId=Request.merId;//获取商户号
+		function goindex(){
+				location.href="index.html?merId="+merId;
+			}
+	</script>
+	</body>
+</html>

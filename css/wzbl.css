@@ -1,0 +1,376 @@
+			*{
+				margin:0px;
+				padding:0px;
+			}
+			html{
+				font-size: 60px;
+			}
+			body{
+				background: #efeff4;
+			}
+			.contain{
+				width:100%;
+			}
+			.head{
+				width:100%;
+				height: 0.27rem;
+			}
+			.head1{
+				width:100%;
+			}
+			.head1 p{
+				width:6rem;
+				margin:0.16rem 0.2rem;
+				line-height: 0.26rem;
+				letter-spacing: 0.02rem;
+				font-size: 0.2rem;
+				color: #888;
+			}
+			.contain .sec{
+				font-size: 0.3rem;
+				background: #fff;
+				color: #333;
+				font-family: inherit;
+			}
+			.sec ul{
+				list-style: none;
+			}
+			.sec li{
+				font-size: 0.22rem;
+				padding:0.26rem;
+				border-bottom: 1px solid #eee;
+			}
+			.sec input{
+				margin-left: 0.8rem;
+				font-size: 0.22rem;
+				width:2rem; 
+				border:none;
+				outline: none;
+			}
+			.sec select{
+				position: relative;
+				bottom: 0.01rem;
+				left:0.8rem;
+				background: #fff;
+				width:0.74rem;
+				font-size: 0.22rem;
+				border: none;
+				outline: none;
+			}
+			
+			.sec .cs{
+				margin-left: 0.88rem;
+				width:3.4rem;
+			}
+			.sec .phone{
+				margin-left:1.1rem;
+				width:3.4rem;
+			}
+			.sec .spe{
+				margin-left: 0.45rem;
+				width:3.4rem;
+				}
+			.list{
+		    	margin-top:0.2rem;
+		    	padding-top:0.2rem;
+		    	padding-left: 0.2rem;
+		    	background: #fff;
+		    	font-size: 0.22rem;
+		    }
+		    .list img{
+		    	margin-top:0.2rem;
+		    	margin-left: 0.4rem;
+		    	width:5.2rem;
+		    }
+		    .lis{
+		    	padding-top:0.1rem;
+		    	padding-bottom: 0.2rem;
+		    	border-bottom: 1px solid #d8d8d8;
+		    	background: #fff;
+		    	text-align: center;
+		    	font-size: 0.2rem;
+		    	color: #333;
+		    }
+		    .lis ul{
+		    	display: flex;
+		    }
+		    .lis li{
+		    	flex: 1;
+		    }
+		    .con{
+		    	padding-top: 0.2rem;
+		    	padding-bottom: 0.2rem;
+		    	border-bottom: 1px solid #d8d8d8;
+		    	background: #fff;
+		    	padding-left: 2.4rem;
+		    	font-size: 0.22rem;
+		    	color: #666;
+		    	line-height: 0.46rem;
+		    }
+		    .con h3{
+		    	margin-left: 0.16rem;
+		    	font-weight: 400;
+		    	color: #333;
+		    }
+			::-webkit-input-placeholder { /* WebKit browsers */ 
+			color: #ccc; 
+			} 
+			.sec .hmyz{
+				color: #ee7e1c;
+			}
+			.agree{
+				margin:0.2rem 0rem 1.8rem 0.3rem;
+				font-size: 0.22rem;
+			}
+			.agree span{
+				color: #888;
+			}
+			.agree #no,.agree #yes{
+				position: relative;
+				top:0.04rem;
+				margin-right: 0.1rem;
+				float: left;
+				width:0.22rem;
+				cursor: pointer;
+			}
+			.agree #no{
+				display: block;
+			}
+			.agree #yes{
+				display: none;
+			}
+			.agree a{
+				text-decoration: none;
+				color: #20a29d;
+			}
+			.agree .btn{
+				margin-top:1rem;
+				margin-left: 0.3rem;
+				background: #20a29d;
+				border: none;
+				border-radius: 0.1rem;
+				width:5.2rem;
+				height:0.66rem;
+				font-size: 0.3rem;
+				color: #fff;
+				cursor: pointer;
+			}
+			ul{list-style: none;}
+			.log{margin-top:1rem;text-align: center;}
+			.log img{width:4.6rem;margin:0 auto;}
+			.tip{width:100%;font-size: 0.3rem;color:#888;}
+			.tip ul{margin-left:0.3rem;width:5.9rem; display: flex;}
+			.tip li{flex: 1;}
+			.tip .two{margin-top:0.1rem;font-size: 0.25rem;color: #bbb;}
+			.banli{
+			    position: fixed;
+			    bottom: 0;
+			    padding-left: 0.3rem;
+				padding-top:0.26rem;
+				padding-bottom: 0.26rem;
+				background: #fff;
+				width:100%;
+				font-size: 0.2rem;
+				color: #434343;
+			}
+			.banli h3{
+				font-weight: 400;
+			}
+			.banli .pay{
+				color: #20A29D;
+			}
+            .banli span{
+            	color: #999;
+            }
+            .banli input{
+            	float: right;
+            	margin-top:-0.58rem;
+            	margin-right: 0.6rem;
+            	padding:0.1rem 0rem;
+            	background: #20A29D;
+            	border:none;
+            	border-radius: 0.1rem;
+            	width:2rem;
+            	font-size: 0.26rem;
+            	color: #fff;
+            }
+            /*车辆列表*/
+            .car{
+            	margin:0 auto;
+            	margin-top:0.3rem;
+            	padding-top:0.26rem;
+            	padding-left: 0.26rem;
+            	background: #fff;
+            	border-radius: 0.2rem;
+            	width:5.72rem;
+            	height: 1.3rem;
+            }
+            .car .img1{
+            	float: left;
+            	width:1.06rem;
+            	margin-right: 0.2rem;
+            }
+            .content{
+            	margin-left: 0.2rem;
+            	float: left;
+            	width:3.2rem;
+            	font-size: 0.26rem;
+            	color: #454545;
+            	letter-spacing: 0.01rem;
+            }
+            .car input{
+            	border:none;
+            	outline: none;
+            	font-size: 0.3rem;
+            }
+            .car .span1{
+            	width:0.3rem;
+            }
+            .car .span2{
+            	width:1.1rem;
+            }
+            .car .span3{
+            	width:1.2rem;
+            }
+            .car .xiugai{
+            	width:0.24rem;
+            }
+            .car .close{
+            	position: relative;
+            	top:-0.5rem;
+            	right: -3.9rem;
+            	width:0.14rem;
+            }
+            .bot ul{
+            	margin-top:0.2rem;
+            	margin-left: -0.38rem;
+            	margin-right: -0.18rem;
+            	font-size: 0.2rem;
+            	list-style: none;
+            	display: flex;
+            	text-align: center;
+            }
+            .bot li{
+            	flex: 1;
+            }
+            /*添加油卡*/
+            .addy{
+	           	margin:0.26rem;
+	           	border:1px solid #ccc;
+	           	background: #fff;
+	           	padding-bottom: 0.16rem;
+	           	border-radius: 0.1rem;
+	           	text-align: center;
+	           	color: #666;
+            }
+            .addy .titl{
+            	position: relative;
+            	top:-0.14rem;
+            	font-size: 0.22rem;
+            }
+            .addy img{
+            	position: relative;
+            	top:-0.12rem;
+            	left:0.1rem;
+            	width:0.28rem;
+            }
+            .main{
+            	padding:0.3rem;
+                background: #fff;
+                font-size: 0.24rem;
+                color: #454545;
+            }
+            .buy{
+            	background: #fff;
+            	overflow: hidden;
+            	font-size: 0.24rem;
+            	text-align: center;
+            }
+            .buy li,.buy label{
+            	background: url(../img/add/xuanzhong2_png.png) no-repeat;
+            	background-size: 100%;
+            	margin-left:0.42rem ;
+            	margin-bottom: 0.1rem;
+            	padding-top:0.12rem;
+            	float: left;
+            	width:2.54rem;
+            	height:1rem;
+            	line-height: 0.4rem;
+            	letter-spacing: 0.04rem;
+            }
+			.buy .highlight{
+				background: url(../img/add/xuanzhong_png.png) no-repeat;
+				background-size: 100%;
+			}
+            /*首页*/
+           
+            .nav{
+            	padding-top:0.24rem;
+            	padding-bottom: 0.24rem;
+            	background: #fff;
+            	text-align: center;
+            	font-size: 0.21rem;
+            	color: #454545;
+            }
+            .spe1{
+            	margin-top:-0.3rem;
+            }
+            .nav img{ 
+            	width:0.74rem;
+            	margin-bottom: 0.1rem;
+            }
+            .nav ul{
+            	display: flex;
+            }
+			.nav li{
+				flex: 1;
+			}
+			.xian{
+				padding-top:0.24rem;
+				padding-bottom: 0.24rem;
+				padding-left: 0.88rem;
+				margin-top: 0.26rem;
+				background: #fff;
+				font-size: 0.21rem;
+				color: #666;
+			}
+			.xian .big{
+				font-size: 0.56rem;
+				color: #000;
+			}
+			.xian img{
+				margin-left: 0.08rem;
+				width:0.08rem;
+			}
+			.xian .right{
+				float: right;
+				margin-top:0.3rem;
+				margin-right: 0.3rem;
+			}
+			.zixun{
+				margin-top: 0.26rem;
+				padding-bottom: 0.3rem;
+				background: #fff;
+				font-size: 0.24rem;
+				color: #333;
+			}
+			.zixun header{
+				padding-top:0.2rem;
+				padding-left: 0.3rem;	
+			}
+			.message{
+				margin-top:0.2rem;
+				padding-top:0.16rem;
+				padding-bottom: 0.16rem;
+				padding-right: 0.22rem;
+				border-top:1px solid #ccc;
+				height: 1rem;
+				font-size: 0.22rem;
+				color: #555;
+			}
+			.message img{
+				padding-left: 0.22rem;
+				float: left;
+				width:1.5rem;
+				margin-right: 0.18rem;
+			}

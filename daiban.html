@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>年检代办</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<style>
+			.modal {
+			    position: fixed;
+			    left: 0;
+			    right:0;
+			    top: 0;
+			    bottom: 0  ;    
+			    /*background: rgba(0,0,0, .7);*/
+			    z-index: 999;
+			    font-size: 0.26rem;
+			    color: #ccc;
+			    text-align: center;
+			    display: none;
+			}
+			.modal-dialog {
+			    width: 5rem;
+			    margin: 4rem auto;
+			}
+			.modal-content {
+			    background: #222;
+			    border:none;
+			    border-radius: 0.2rem;
+			    padding: 0.22rem 0.18rem;
+			    position: relative;
+			}
+			
+			#qb{
+			    background-color: #EE522A;
+			    color: #fff;
+			}
+			
+			.modal-content a{
+			    position: absolute;
+			    top:0rem;
+			    right: 0.2rem;
+			    font-size: 0.3rem;
+			    color: #ccc;
+			}
+		</style>
+	</head>
+	<body>
+	   <div class="contain">
+	   	  <header class="head"></header>
+	   	  <section class="sec">
+	   	  	<ul>
+	   	  		<li><span>车牌号码</span>
+	   	  			<input class="cs" id="carid" type="text" placeholder="填写车牌号" />
+	   	  		</li>
+	   	  		<li><span>车主姓名</span>
+	   	  			<input class="cs" id="username" type="text" placeholder="填写车主姓名" />
+	   	  		</li>
+	   	  		<li><span>手机号码</span>
+	   	  			<input class="cs" id="phone" type="text" placeholder="填写11位手机号码" />
+	   	  		</li>
+	   	  		<li><span>车辆注册日期</span>
+	   	  			<input class="spe" id="dates" type="text" placeholder="0000-00-00" />
+	   	  		</li>
+	   	  	</ul>
+	   	  </section>
+	   	    <header class="head1">
+	   	    	<p>
+	   	   		注：面包车和7座以上车辆暂不纳入免检范围；2012年6月26日前购买的车辆不给予办理；
+	   	     	</p>
+	   	    </header>
+		  <section class="list">
+				<div class="tit">办理流程</div>
+				<img src="img/年检代办_03.png" />
+		  </section>
+		  <section class="lis">
+		  	<ul>
+		  		<li>准备材料</li>
+		  		<li>寄送资料</li>
+		  		<li>年审办理</li>
+		  		<li>办理成功</li>
+		  	</ul>
+		  </section>
+		  <section class="con">
+		  	<h3>年检所需材料</h3>
+		  	<div>
+		  		1. 身份证复印件;<br />
+		  	    2. 行驶证原件正副本;<br />
+		  	    3. 交强险保单副本;<br />
+		  	</div>
+		  </section>
+	   	  <section class="agree">
+	   	  	<img id="no" src="img/yuan_png.png" onclick="selec();" />
+	   	  	<img id="yes" src="img/xuanzhong.png" onclick="selec();" />
+	   	  	<span>已阅读并同意 <a href="#">&nbsp;《年检代办须知》</a></span></span>
+	   	  </section>
+	   	  <section class="banli">
+	   	    <h3>车辆年检</h3>
+	   	    <div>应付款<span class="pay">0.00</span>元<span>（含材料费）</span></div>
+	   	    <input type="button" id="btn1" value="立即办理" />
+	   	  </section>
+	   	  <div class="modal">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <form id="buy-form">
+                 <div class="tips" id="error"></div>
+            </form>
+			      </div>
+			  </div>
+		  </div>
+	   	  </div>
+	   	  <script>
+	   	  	function selec(){
+		   		var no=document.getElementById("no");
+		   	  	var yes=document.getElementById("yes");
+		   	  	if(yes.style.display=="block"){
+		   	  		yes.style.display="none";
+		   	  		no.style.display="block";
+		   	  	}else{
+		   	  		yes.style.display="block";
+		   	  		no.style.display="none";
+		   	  	}
+		   	}	  
+	   	  	var btn1=document.getElementById("btn1");
+			function carIDcheck(){
+				var cardID=document.getElementById("carid");
+				if(!cardID.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+                    document.getElementById("error").innerHTML="车牌号不能为空";
+					return false;
+				}
+				else{
+					return true;
+				}
+			}
+			function userCheck(){
+				var userName=document.getElementById("username");
+				var reg=/^[\u4E00-\u9FA5]{1,5}$/;
+				if(!userName.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="姓名不能为空";
+					return false;
+				}else if(!reg.test(userName.value)){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="姓名必须为汉字";
+					return false;
+				}else{
+					return true;
+				}
+				
+				
+			}
+			
+			function phoneCheck(){
+				var phone=document.getElementById("phone");
+				var phonereg=/^(|1[3578]\d{9})$/;
+				if(!phone.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="手机号不能为空";
+					return false;
+				}else if(!phonereg.test(phone.value)){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="手机号格式不正确";
+					return false;
+				}else{
+					return true;
+				}
+			}
+			function dateCheck(){
+				var dates=document.getElementById("dates");
+				
+				if(!dates.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="注册日期不能为空";
+					return false;
+				}else{
+					return true;
+				}
+			}
+			function agrees(){
+				var yes=document.getElementById("yes");
+				if(yes.style.display=="block"){
+					return true;
+				}else{
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="请阅读《年检代办须知》";
+					return false;
+				}
+			}
+			  btn1.onclick=function(){
+			  	agrees();
+			  	  dateCheck();
+			  	  phoneCheck();
+			  	  userCheck();
+			  	  carIDcheck();
+				    setTimeout(function(){
+						document.getElementsByClassName("modal")[0].style.display="none";
+					},1600);
+				 
+			  }
+	   	  </script>
+	</body>
+</html>

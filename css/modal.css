@@ -1,0 +1,81 @@
+			.modal1{
+		    position: fixed;
+		    left: 0;
+		    right: 0;
+		    top: 0;
+		    bottom: 0;
+		    background: rgba(0,0,0, 0.3);
+		    z-index: 1000;
+		    color: #454545;
+		    font-size:14px ;
+		    letter-spacing: 1px;
+		    font-family: "黑体";
+		    display: none;
+			}
+			.small {
+				position: fixed;
+				bottom: 0;
+				left: 0;
+			    width: 100%;
+			   
+			    background:  #fff;
+			}
+			.cont header{
+				padding-left:10px;
+				padding-top:12px;
+				padding-bottom: 10px;
+				border-bottom: 1px solid #dfdfdf;
+				display: flex;
+				font-size: 14px;
+			}
+			.cont .close{
+				flex: 3;
+				font-size: 18px;
+				color: #ccc;
+			}
+			.cont .pay{
+				flex: 4;
+				position: relative;
+				top:1px;
+			}
+			.cont .times span{
+				margin-right: -6px;
+			}
+			.cont .money{
+				padding:24px 0px 0px 0px;
+				text-align: center;
+				font-size: 34px;
+				color: #333;
+				letter-spacing: 1.6px;
+			}
+			.cont .money span{
+				padding-left: 4px;
+			}
+			.orderid{
+				margin:0px 12px;
+				padding-top: 12px;
+				padding-bottom: 12px;
+				border-bottom: 1px solid #dfdfdf;
+				display: flex;
+			}
+			.orderid span{
+				flex: 1;
+			}
+			.orderid .spe{
+				text-align: right;
+			}
+			.foot{
+				text-align: center;
+				padding:110px 0px 20px 0px;
+			}
+			.foot .btnp{
+				width:80%;
+				height: 40px;
+				background: #20A29D;
+				border: none;
+				border-radius: 4px;
+				color: #FFFFFF;
+				font-size: 16px;
+				letter-spacing: 2px;
+				font-family: "黑体";
+			}

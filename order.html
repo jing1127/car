@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>我的订单</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<style>
+		  *{
+		  	margin: 0;
+		  	padding: 0;
+		  }
+		  html{
+		  	font-size: 60px;
+		  }
+		  a{
+		  	text-decoration: none;
+		  	color: #333;
+		  }
+		  .order{
+		  	margin:0 auto;
+		  	margin-top:0.3rem;
+		  	border:1px solid #dedede;
+		  	box-shadow:0 0 8px #ccc;
+		  	width:5.8rem;
+		  	background: #fff;
+		  	font-size: 0.22rem;
+		  	color: #454545;
+		  	letter-spacing: 0.02rem;
+		  	
+		  }
+		  .order .top{
+		  	display: flex;
+		  	margin:0.2rem;
+		  	padding-bottom: 0.14rem;
+		  	border-bottom: 1px dashed #ccc;
+		  }
+		  
+		  .top .orderid{
+		  	flex: 3;
+		  }
+		  .top .zhuangtai{
+		  	flex: 1;
+		  	text-align: right;
+		  	color: #20A29D;
+		  	font-size: 0.2rem;
+		  }
+		  .list{
+		  	padding: 0;
+		  	padding-left: 0.2rem;
+		  }
+		  .list li{
+		  	margin-bottom: 0.18rem;
+		  }
+		  .list .spe{
+		  	display: flex;
+		  	margin-right: 0.2rem;
+		  	border-bottom: 1px dashed #ccc;
+		  }
+		  .spe div{
+		  	padding:0;
+		  	flex: 1;
+		  }
+		  .spe .con{
+		  	border: none;
+		  	text-align: right;
+		  }
+		  .qp{
+		  	padding:0rem 0.2rem 0.2rem 0rem; 
+		  	text-align: right;
+		  
+		  }
+		  .btns{
+		  	
+		  	border:1px solid #20A29D;
+		  	border-radius: 0.08rem;
+		  	width:1.4rem;
+		  	height: 0.34rem;
+		  	font-size: 0.22rem;
+		  	background: #fff;
+		  	color: #20A29D;
+		  	padding:0.02rem 0.16rem;
+		  }
+		  .none{
+				padding-top: 2.5rem;
+				text-align: center;
+				display: none;
+			}
+			.none img{
+				width:2.4rem;
+			}
+		</style>
+		<style>
+	    [v-cloak] {
+			        display: none;
+			    }
+		</style>
+
+		<link href="css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+	   <div class="contain" v-cloak v-for="item in datas">
+	     <div class="order">
+	     	<section class="top">
+	     		<header class="orderid">订单编号：<span id="ordernum">{{item.ordernum}}</span></header>
+	     		<span class="zhuangtai">{{ item.orderstate==0?"未接单":(item.orderstate==1?"处理中":(item.orderstate==2?"待审核":(item.orderstate==3?"已退款":"交易成功"))) }}</span>
+	     	</section>
+	     	<a href="orderall.html?ordernum={{item.ordernum}}&merId={{merId}}">
+	     		<section class="list">
+	     		<ul>
+	     			<li>下单时间：<span>{{item.starttime}}</span></li>
+	     			<li>违规原因：<span>{{item.cause}}</span></li>
+	     			<li class="spe">
+	     				<div>  
+	     					扣除分值：<span>{{item.score}}</span>
+	     				</div>
+	     				<div class="con">
+	     					合计：<span>{{item.moneyall}}</span>
+	     				</div>
+	     			</li>
+	     		</ul>
+	     	</section>
+	     	</a>
+	     	
+	     	<section class="qp">
+	     		<input  class="btns" type="button" value="删除订单" id="delorder" @click="delCheck($index)" />
+	     	</section>
+	     </div>
+	   </div>
+	   	<section class="none" id="none">
+				<img src="img/order.png" /> 
+		</section>  
+	   	  <script>
+			//获取地址栏
+	    	function UrlSearch()
+				{                 
+				    var name,value;
+				    var str=location.href; //取得整个地址栏
+				    var num=str.indexOf("?")
+				    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+				    var arr=str.split("&"); //各个参数放到数组里
+				    for(var i=0;i < arr.length;i++){
+				        num=arr[i].indexOf("=");
+				        if(num>0){
+				            name=arr[i].substring(0,num);
+				            value=arr[i].substr(num+1);
+				            this[name]=value;
+				        }
+				    }
+				}
+				var Request=new UrlSearch(); //实例化
+				var merId="M1705041551540001";//获取商户号
+				$.ajax({
+						type:"post",
+						url:"http://192.168.1.141:8080/CarMent/userOrder",
+						data:{
+							"merId":merId
+						},
+						dataType: "json",
+						success:function(data){
+							var order=data.orderList;
+							if(order==0){
+								$("#none").css("display","block");
+							}else{
+								var vm = new Vue({
+								el : ".contain",
+								data : {
+									datas : data.orderList,
+									merId : data.merId
+								},
+								methods : {
+									delCheck : function(index){
+													var ordernum = vm.datas[index].ordernum;
+													vm.datas.splice(index,1);
+													$.ajax({
+															type:"post",
+															url:"http://192.168.1.141:8080/CarMent/orderDel",
+															data:{
+																"merId":merId,
+																"ordernum":ordernum
+															},
+															dataType: "json",
+															success:function(data){
+																//alert(JSON.stringify(data.orderList));
+																console.log("删除成功!");
+																//window.location.reload();
+															},
+											          error:function(){
+												          console.log("操作失败！");
+														}
+													});
+												}
+									
+								}
+							})
+							}
+							//alert(JSON.stringify(data.orderList));
+							
+							return;
+						},
+		          error:function(){
+			          console.log("操作失败!");
+					}
+				})
+				function delCheck(){
+					var ordernum=$("#ordernum").html();
+					$.ajax({
+							type:"post",
+							url:"http://192.168.1.141:8080/CarMent/orderDel",
+							data:{
+								"merId":merId,
+								"ordernum":ordernum
+							},
+							dataType: "json",
+							success:function(data){
+								
+								//alert(JSON.stringify(data.orderList));
+								console.log("删除成功!");
+								//window.location.reload();
+							},
+			          error:function(){
+				          console.log("操作失败!");
+						}
+					});
+				}
+			
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js" ></script>
+		
+	</head>
+	<body>
+		<script>
+			//获取地址栏
+	    	function UrlSearch()
+				{                 
+				    var name,value;
+				    var str=location.href; //取得整个地址栏
+				    var num=str.indexOf("?")
+				    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+				    var arr=str.split("&"); //各个参数放到数组里
+				    for(var i=0;i < arr.length;i++){
+				        num=arr[i].indexOf("=");
+				        if(num>0){
+				            name=arr[i].substring(0,num);
+				            value=arr[i].substr(num+1);
+				            this[name]=value;
+				        }
+				    }
+				}
+				var Request=new UrlSearch(); 
+				var merId=Request.merId;
+				var payState=Request.payState;
+				
+				
+				var openType;
+				//判断微信还是支付宝
+			if(/MicroMessenger/.test(window.navigator.userAgent)){
+				//微信
+				openType='weixin';
+			}else if(/AlipayClient/.test(window.navigator.userAgent)){
+				//支付宝
+				openType='zhifubao';
+				
+			}else{
+				openType='others';
+			}
+			location.href="pay.goldepay.cn/mobile/AppQuick/appOpenAPI?merId="+merId+"&payState="+payState+"&openType="+openType;
+				
+		</script>
+	</body>
+</html>

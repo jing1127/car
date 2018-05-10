@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>添加车辆</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<style>
+			.modal {
+			    position: fixed;
+			    left: 0;
+			    right:0;
+			    top: 0;
+			    bottom: 0  ;    
+			    /*background: rgba(0,0,0, .7);*/
+			    z-index: 999;
+			    font-size: 0.26rem;
+			    color: #ccc;
+			    text-align: center;
+			    display: none;
+			}
+			.modal-dialog {
+			    width: 5rem;
+			    margin: 2rem auto;
+			}
+			.modal-content {
+			    background: #222;
+			    border:none;
+			    border-radius: 0.2rem;
+			    padding: 0.22rem 0.18rem;
+			    position: relative;
+			}
+			
+			#qb{
+			    background-color: #EE522A;
+			    color: #fff;
+			}
+			
+			.modal-content a{
+			    position: absolute;
+			    top:0rem;
+			    right: 0.2rem;
+			    font-size: 0.3rem;
+			    color: #ccc;
+			}
+			.sec select{
+				width:1.8rem;
+				color: #999;
+			}
+			img{border:0;max-width:100%;height: auto;}
+			.clear{background:none;border:0;clear:both;display:block;float:none;font-size:0;overflow:hidden;visibility:hidden;width:0;height:0;}
+			a{text-decoration:none;outline:none;}
+			.fl{float:left;}
+			.fr{float:right;}
+			.none{display:none;}
+		</style>
+		<link href="css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+	   <div class="contain">
+	   	  <header class="head"></header>
+	   	  <section class="sec">
+	   	  	<ul>
+	   	  		<li><span>车牌号码</span>
+	   	  			<input class="cs" id="carid" type="text" name="carnum"  placeholder="填写车牌号" />
+	   	  		</li>
+	   	  		<li><span>车辆类型</span>
+	   	  			<select id="cartype">
+	   	  				<option value="01">大型汽车</option>
+	   	  				<option value="02">小型汽车</option>
+	   	  				<option value="03">使馆汽车</option>
+	   	  				<option value="04">领馆汽车</option>
+	   	  				<option value="05">境外汽车</option>
+	   	  				<option value="06">外籍汽车</option>
+	   	  				<option value="07">两三轮摩托车</option>
+	   	  				<option value="08">轻便摩托车</option>
+	   	  				<option value="09">使馆摩托车</option>
+	   	  				<option value="10">领馆摩托车</option>
+	   	  				<option value="11">境外摩托车</option>
+	   	  				<option value="12">外籍摩托车</option>
+	   	  				<option value="13">农用运输车</option>
+	   	  				<option value="14">拖拉机</option>
+	   	  				<option value="15">挂车</option>
+	   	  				<option value="16">教练汽车</option>
+	   	  				<option value="17">教练摩托车</option>
+	   	  				<option value="18">试验汽车</option>
+	   	  				<option value="19">试验摩托车</option>
+	   	  				<option value="20">临时入境汽车</option>
+	   	  				<option value="21">临时入境摩托车</option>
+	   	  				<option value="22">临时行驶车</option>
+	   	  				<option value="23">公安警车</option>
+	   	  				<option value="24">其他车型</option>
+	   	  			</select>
+	   	  			<!--<input class="cs" id="cxh" type="text" name="cartype"  placeholder="请输入车辆型号" />-->
+	   	  		</li>
+	   	  		<li><span>发动机号</span>
+	   	  			<input class="cs" id="fdj" type="text" name="engineno"  placeholder="请输入发动机号" />
+	   	  		</li>
+	   	  		<li><span>车架号</span>
+	   	  			<input class="phone" id="vinnum" type="text" name="vinnum"  placeholder="请输入17位车架号" />
+	   	  		</li>
+	   	  	</ul>
+	   	  </section>
+
+	   	  <section class="agree">
+	   	  	<img id="no" src="img/yuan_png.png" onclick="selec();" />
+	   	  	<img id="yes" src="img/xuanzhong.png" onclick="selec();" />
+	   	  	<span>已阅读并同意 <a href="agree.html">&nbsp;《授权协议》</a></span>
+	   	  	<br /><input class="btn" type="button" value="保存" id="btn1" />
+	   	  </section>
+	   	  <input type="hidden" id="" name="merchant" value="123asd"/> 
+	   	  <div class="modal">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <form id="buy-form">
+                 <div class="tips" id="error"></div>
+            </form>
+			      </div>
+			  </div>
+		  </div>
+	   	  <script>
+	   	  	//获取地址栏
+	    	function UrlSearch()
+				{
+				    var name,value;
+				    var str=location.href; //取得整个地址栏
+				    var num=str.indexOf("?")
+				    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+				    var arr=str.split("&"); //各个参数放到数组里
+				    for(var i=0;i < arr.length;i++){
+				        num=arr[i].indexOf("=");
+				        if(num>0){
+				            name=arr[i].substring(0,num);
+				            value=arr[i].substr(num+1);
+				            this[name]=value;
+				        }
+				    }
+				}
+				var Request=new UrlSearch(); //实例化
+				var merId=Request.merId;//获取商户号
+				
+				
+	   	  	function selec(){
+		   		var no=document.getElementById("no");
+		   	  	var yes=document.getElementById("yes");
+		   	  	if(yes.style.display=="block"){
+		   	  		yes.style.display="none";
+		   	  		no.style.display="block";
+		   	  	}else{
+		   	  		yes.style.display="block";
+		   	  		no.style.display="none";
+		   	  	}
+		   	}	  
+            var btn1=document.getElementById("btn1");
+			function carIDcheck(){
+				var cardID=document.getElementById("carid");
+				if(!cardID.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+                    document.getElementById("error").innerHTML="车牌号不能为空";
+					return false;   
+				}
+				else{  
+					return true;
+				}
+			}
+			
+			function carFdj(){
+				var fdj=document.getElementById("fdj");
+				var reg=/^[a-zA-Z0-9]{6,8}$/;
+				if(!fdj.value)   {
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="发动机号不能为空";
+					return false;
+				}
+//				else if(!reg.test(fdj.value)){
+//					document.getElementsByClassName("modal")[0].style.display="block";
+//					document.getElementById("error").innerHTML="发动机号必须为6-8位数字";
+//					return false;
+//				}
+				else{
+					return true;
+				}
+			}
+			function carCheck(){
+				var vinnum=document.getElementById("vinnum");
+				var reg=/^[a-zA-Z0-9]{17}$/;
+				if(!vinnum.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="车架号不能为空";
+					return false;
+				}
+				else if(!reg.test(vinnum.value)){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="车架号必须为17位数字";
+					return false;
+				}
+				else{
+					return true;
+				}
+			}
+			function agrees(){
+				var yes=document.getElementById("yes");
+				if(yes.style.display=="block"){
+					return true;
+				}else{
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="请阅读《授权协议》";
+					return false;
+				}
+			}
+			  btn1.onclick=function(){
+			  	  carIDcheck();
+			  	  carFdj();    
+				  carCheck();
+				  agrees();
+				    setTimeout(function(){
+						document.getElementsByClassName("modal")[0].style.display="none";
+					},1600);
+				  if( carIDcheck()&&carFdj()&&carCheck()&&agrees()){
+				  		var carnum=$("#carid").val();
+//				  		var cartype=$("#cxh").val();
+				  		var engineno=$("#fdj").val();
+				  		var vinnum=$("#vinnum").val();
+				  		var cartype=$("#cartype").val();
+				  	$.ajax({
+						type:"post",
+						url:"http://192.168.1.141:8080/CarMent/car/carAdd",
+						data:{
+							"merId":merId,
+							"carnum":carnum,
+							"cartype":cartype,
+							"engineno":engineno,
+							"vinnum":vinnum
+						},
+						success:function(data){
+							var code=data.code;								
+							if(code==1){
+								document.getElementsByClassName("modal")[0].style.display="block";
+								document.getElementById("error").innerHTML="最多添加5辆车";
+								setTimeout(function(){
+									document.getElementsByClassName("modal")[0].style.display="none";
+								},1600);
+							}else if(code==2){
+								document.getElementsByClassName("modal")[0].style.display="block";
+								document.getElementById("error").innerHTML="该车辆已经在车辆列表啦~";
+								setTimeout(function(){
+									document.getElementsByClassName("modal")[0].style.display="none";
+								},1600);
+							}else{
+								location.href="list.html?merId="+merId;
+							}
+							
+						},
+		          error:function(){
+			          console.log("操作失败!");
+					}
+					})
+				  }
+			  }
+	   	  </script>
+	</body>
+</html>

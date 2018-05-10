@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>待接单</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="mui/mui.min.js" ></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/tabs.js" ></script>
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<link rel="stylesheet" href="mui/mui.min.css" />
+		<style>
+			ul{width:100%;list-style: none;}
+	        *{margin: 0;padding: 0;}
+		    html{	font-size: 60px;}
+		    a{text-decoration: none;color: #333;}
+			.contain{font-size: 15px; width:100%;}
+			.heads{z-index: 999;background: #fff;padding:15px;display: flex;border-bottom: 1px solid #ccc;}
+			.heads a{text-decoration: none;}
+			.ordernone,.orderown,.orderok{padding:2px;flex: 1;border-top: 1px solid #20A29D;border-bottom: 1px solid #20A29D;text-align: center;color: #20A29D;cursor: pointer;}
+			.ordernone{border-left: 1px solid #20A29D;}
+			.orderok{border-right: 1px solid #20A29D;}	
+			.highlight{background: #20A29D;color: #fefefe;}
+			.contnone,.contown,.contok{padding:0.26rem;padding-bottom: 0;}
+			.listnone{margin:0.24rem;border-bottom: 1px solid #ccc;box-shadow:0 0 8px #ccc;padding:0.26rem;padding-bottom: 0rem;background: #fff;}		
+			/*待接单头部内容*/
+			.headnone{border-bottom: 1px dashed #ccc;padding-bottom: 0.12rem;display: flex;font-size: 0.22rem;letter-spacing: 0.02rem;color: #454545;}
+			.img img{width:1rem;}
+			.headnone .img{flex: 2;}
+			.headnone .tit{flex: 3;padding-top:0.32rem;}
+			.headnone .money{flex: 3;text-align: right;padding-top:0.32rem;color: #ff9000;font-size: 0.28rem;}
+			.mainnone{padding-top: 0.18rem;padding-bottom: 0.14rem;border-bottom: 1px dashed #ccc;font-size: 0.22rem;letter-spacing: 0.02rem;line-height: 0.44rem;color: #454545;}
+			.footnone{text-align: center;}
+			.footnone .btnnone{width:5rem;height: 0.66rem;color: #333;border: none;background: #fff;font-size: 0.22rem;}
+
+			.none{padding-top: 2.5rem;text-align: center;display: none;}
+			.none img{width:2.4rem;}
+			.mui-scroll-wrapper{top:60px;}
+			.mui-scroll-wrapper,.mui-table-view-chevron{background: #efefef4;}
+		</style>
+		<style>
+	    [v-cloak] {
+			        display: none;
+			    }
+		</style>
+	</head>
+	<body>
+		 <div class="contain">
+	   	 	<header class="heads">
+	   	 		<div class="ordernone highlight" onclick="tabs();"><div  id="ordernone">待接单</div></div>
+	   	 		<div class="orderown" onclick="tab1();"><div id="orderown">待处理</div></div>
+	   	 		<div class="orderok" onclick="tab2();"><div id="orderok">已完成</div></div>
+	   	 	</header>
+		
+		<div class="index_box">
+			
+        <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+            <div class="mui-scroll">
+              <ul class="mui-table-view-chevron">
+              	<li class="contain" v-cloak v-for="info in infos">
+              	  <section class="listnone">
+						<header class="headnone">
+							<div class="img"><img src="img/1.png" /></div>
+				     		<div class="tit">违章处理</div>
+				     		<div class="money">￥<span>{{info.money}}</span></div>
+						</header>
+						<section class="mainnone">
+							<ul>
+				     			<li>下单时间：<span>{{info.starttime}}</span></li>
+				     			<li>处理期限：<span>3个工作日内</span></li>
+				     			<li>订单编号：<span id="ordernum">{{info.ordernum}}</span></li>
+				     			<li>违规原因：<span>{{info.cause}}</span></li>
+				     			<li>扣除分值：<span>{{info.score}}</span></li>
+							</ul>
+						</section>
+						<section class="footnone">
+							<input type="button" class="btnnone" id="btnnone" value="立即接单" @click="delCheck($index)" />
+						</section>
+				</section>
+              	</li>
+                
+              </ul>
+            </div>
+          </div>
+    </div>
+    <section class="none" id="none">
+				<img src="img/order.png" /> 
+	</section>  
+    </div>
+	</body>
+	<script>
+		//获取地址栏
+	    	function UrlSearch()
+				{
+				    var name,value;
+				    var str=location.href; //取得整个地址栏
+				    var num=str.indexOf("?")
+				    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+				    var arr=str.split("&"); //各个参数放到数组里
+				    for(var i=0;i < arr.length;i++){
+				        num=arr[i].indexOf("=");
+				        if(num>0){
+				            name=arr[i].substring(0,num);
+				            value=arr[i].substr(num+1);
+				            this[name]=value;
+				        }
+				    }
+				}
+				var Request=new UrlSearch(); //实例化
+				var merId=Request.merId;//获取商户号
+				$(function(){
+			      	var lastIndex=0;
+			         var vm=new Vue({
+			             el:".index_box",
+			             data:{
+			             	 merId:merId,
+			                 infos:[],
+			             },
+				        methods : {		
+				        				delCheck : function(index){
+											var ordernum = vm.infos[index].ordernum;
+											vm.infos.splice(index,1);
+											$.ajax({
+												type:"post",
+												url:"http://116.62.153.14:80/CarMent/orderUpdate",
+												data:{
+													"merId":merId,
+													"ordernum":ordernum
+												},
+												dataType: "json",
+												success:function(data){
+													//alert(JSON.stringify(data.orderList));
+													console.log("接单成功!");
+													//window.location.reload();
+												},
+												error:function(){
+													console.log("操作失败!");
+												}
+											});
+										}									
+									
+								}
+			         });
+			        mui.init({
+			            swipeBack: false,
+			            pullRefresh:{
+			                container:"#refreshContainer",
+			                down:{
+			                    style:"circle",
+			                    callback:pulldownRefresh
+			                },
+			                up:{
+			                	auto:false,
+			                    height:"50px",
+			                    contentrefresh:"正在加载...",
+			                    contenttnomore:"没有更多数据了",
+			                    callback:pullupRefresh
+			                }
+			            }
+			        });
+			        function pulldownRefresh(){
+			            $.ajax({
+			                url:"http://116.62.153.14:80/CarMent/orderList",
+			                data:{
+			                    merId:merId,
+			                    id: 0
+			                },
+			                type:"POST",
+			                dataType:"json",
+			                success:function(data){ 
+			                	vm.merId=data.merId;
+			                    vm.infos=data.orderAll;
+			                    lastIndex = vm.infos[vm.infos.length-1].id;
+						        console.log("id为："+ JSON.stringify(vm.infos[vm.infos.length-1].id));
+							}
+			            });  
+			            mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+			            mui.toast('下拉刷新成功');
+			            mui('#refreshContainer').pullRefresh().refresh(true);
+			        };
+			        function pullupRefresh(){//http:192.168.2.174:8080/ssm/RefundList
+			            $.ajax({
+			                url:"http://116.62.153.14:80/CarMent/orderList",
+			                type:"POST",
+			                data:{
+			                	merId:merId,
+			                    id:lastIndex
+			                },
+			                dataType:"json",
+			                success:function(data){
+			                	       	 
+								vm.merId=data.merId;
+			                    vm.infos=vm.infos.concat(data.orderAll);
+			                    lastIndex = vm.infos[vm.infos.length-1].id;
+						        console.log("id为："+ JSON.stringify(vm.infos[vm.infos.length-1].id));
+			                    if(data.orderAll<5){
+			                        // this.endPullupToRefresh(true);
+			                        mui('#refreshContainer').pullRefresh().endPullupToRefresh(true);
+			                    }else{
+			                        // this.endPullupToRefresh(false);
+			                        mui('#refreshContainer').pullRefresh().endPullupToRefresh(false);
+			                    }
+			                }
+			            });
+			
+			        };
+			        $(".index_box").ready(function(){
+			          	alert("12");
+			              $.ajax({
+			                  url:"http://192.168.2.174:8080/ssm/orderList",
+			                  type:"POST",
+			                  data:{
+			                  	merId:merId,
+			                  	id:0
+			                  },
+			                  dataType:"json",
+			                  success:function(data){
+			                  	if(data.orderAll==0){
+			                		$("#none").css("display","block");
+			                		$(".index_box").css("display","none");
+			                	}else{
+			                      vm.infos=data.orderAll;
+			                       lastIndex = vm.infos[vm.infos.length-1].id;
+			                      }
+			                  }
+			              });
+			        });
+				});
+					
+
+
+	</script>
+</html>

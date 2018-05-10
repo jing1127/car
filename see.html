@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>退款详情</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<style>
+		  *{
+		  	margin: 0;
+		  	padding: 0;
+		  }
+		  html{
+		  	font-size: 60px;
+		  }
+		  .order{
+		  	margin-top:0.3rem;
+		  	padding-top:0.06rem;
+		  	width:100%;
+		  	background: #fff;
+		  	font-size: 0.22rem;
+		  	color: #454545;
+		  	letter-spacing: 0.02rem;
+		  	
+		  }
+		  .order .top{
+		  	display: flex;
+		  	margin:0.2rem;
+		  	padding-bottom: 0.14rem;
+		  	border-bottom: 1px dashed #ccc;
+		  }
+		  
+		  .top .orderid{
+		  	flex: 3;
+		  }
+		  .top .zhuangtai{
+		  	flex: 1;
+		  	text-align: right;
+		  	color: #20A29D;
+		  	font-size: 0.2rem;
+		  }
+		  
+		 
+		  .own{
+		  	
+		  	margin-left: 0.2rem;
+		  	margin-right: 0.2rem;
+		  	padding-bottom: 0.14rem;
+		  	
+		  }
+		  .own img{
+		  	width:1rem;
+		  	
+		  }
+		  .own .tit{
+		  	position: relative;
+		  	top:-0.4rem;
+		  	left:0.1rem;
+		  }
+		  .own .money{
+		  	flex: 3;
+		  	text-align: right;
+		  	padding-top:0.32rem;
+		  }
+		  .order .one,.order .two{
+		  	margin:0.2rem;
+		  	display: flex;
+		  }
+		  .order .left{
+		  	flex: 1;
+		  }
+		  .order .right{
+		  	text-align: right;
+		  	flex: 1;
+		  }
+		  .order .one,.order .two{
+		  	padding-bottom: 0.2rem;
+		  	border-bottom: 1px dashed #ccc;
+		  }
+		  .order .two{
+		  	border: none;
+		  }
+		  .one .right{
+		  	color: #f00;
+		  	font-size: 0.24rem;
+		  }
+		  .other{
+		  	padding-bottom: 0.04rem;
+		  	font-size: 0.25rem;
+		  	color: #454545;
+		  }
+		  .other .top{
+		  	color: #999;
+		  }
+		  .other .list{
+		  	padding:0rem;
+		  	margin-left: 0.2rem;
+		  	margin-right: 0.2rem;
+		  	letter-spacing: 0.02rem;
+		  }
+		  .other li{
+		  	margin-bottom: 0.2rem;
+		  	font-size: 0.24rem;
+		  	color: #454545;
+		  }
+		</style>
+		<link href="css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+	   <div class="contain">
+	     <div class="order">
+	     	<section class="top">
+	     		<header class="orderid">订单编号：<span id="ordernum"></span></header>
+	     		<span class="zhuangtai">退款成功</span>
+	     	</section>
+	     	<section class="own">
+	     		<img src="img/1.png" />
+	     		<span class="tit">违章处理</span>
+	     		
+	     	</section>
+
+	     </div>
+	     <section class="order">
+	     	<div class="one">
+	     		<div class="left">退款总金额</div>
+	     		<div class="right">￥<span id="moneyall"></span></div>
+	     	</div>
+	     	<div class="two">
+	     		<div class="left">退回余额</div>
+	     		<div class="right">￥<span id="moneyall1"></span></div>
+	     	</div>
+	     </section>
+	     
+	   </div>
+	   <div class="order other">
+	     	<section class="top">
+	     		<header class="orderid">退款信息</header>
+	     		
+	     	</section>
+	     	<section class="list">
+	     		<ul>	
+	     			<li>退款时间：<span id="refundtime"></span></li>
+	     			<li>退款金额：￥<span id="moneyall2"></span></li>
+	     		</ul>
+	     	</section>
+	   </div>
+	   <script>
+		//获取地址栏
+    	function UrlSearch()
+			{
+			    var name,value;
+			    var str=location.href; //取得整个地址栏
+			    var num=str.indexOf("?")
+			    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+			    var arr=str.split("&"); //各个参数放到数组里
+			    for(var i=0;i < arr.length;i++){
+			        num=arr[i].indexOf("=");
+			        if(num>0){
+			            name=arr[i].substring(0,num);
+			            value=arr[i].substr(num+1);
+			            this[name]=value;
+			        }
+			    }
+			}
+			var Request=new UrlSearch(); //实例化
+			var ordernum=Request.ordernum;
+			$.ajax({
+						type:"post",
+						url:"http://192.168.1.141:8080/CarMent/refundall",
+						data:{
+							"ordernum":ordernum
+						},
+						success:function(data){
+							var ordernum=data.ordernum;
+							var moneyall=data.moneyall;
+							var refundtime=data.refundtime;
+							$("#ordernum").html(ordernum);
+							$("#moneyall").html(moneyall);
+							$("#moneyall1").html(moneyall);
+							$("#moneyall2").html(moneyall);
+							$("#refundtime").html(refundtime);
+						},
+		          error:function(){
+			          console.log("操作失败!");
+					}
+				})
+	</script>
+	</body>
+</html>

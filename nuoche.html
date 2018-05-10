@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>一键挪车</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<style>
+			.modal {
+			    position: fixed;
+			    left: 0;
+			    right:0;
+			    top: 0;
+			    bottom: 0  ;    
+			    /*background: rgba(0,0,0,0.7);*/
+			    z-index: 999;
+			    font-size: 0.26rem;
+			    color: #ccc;
+			    text-align: center;
+			    display: none;
+			}
+			.modal-dialog {
+			    width: 5rem;
+			    margin: 4rem auto;
+			}
+			.modal-content {
+			    background: #222;
+			    border:none;
+			    border-radius: 0.2rem;
+			    padding: 0.22rem 0.18rem;
+			    position: relative;
+			}
+			
+			#qb{
+			    background-color: #EE522A;
+			    color: #fff;
+			}
+			
+			.modal-content a{
+			    position: absolute;
+			    top:0rem;
+			    right: 0.2rem;
+			    font-size: 0.3rem;
+			    color: #ccc;
+			}
+			.sec .chepai{
+				width:2.7rem;
+			}
+			.head1{
+				border-bottom: 1px solid #ddd;
+				padding-top:0.2rem;
+				height: 0.5rem;
+				font-size: 0.21em;
+				text-indent: 0.3rem;
+				color: #999;
+				letter-spacing: 0.02rem;
+			}
+			.head{
+				border-top: 1px solid #ddd;
+			}
+			.contents{
+				padding-bottom: 0.06rem;
+			}
+			.contents .top{
+				padding-top:0.3rem;
+				padding-left:0.3rem;
+				font-size: 0.22rem;
+			}
+			.contents input{
+				margin-top:0.2rem;
+				margin-left:0.3rem;
+				width:4rem;
+				font-size: 0.188rem;
+			}
+			.contents{
+				display: flex;
+			}
+			.left{
+				flex: 2;
+			}
+			.photo{
+				flex: 1;
+			}
+			.text{
+				margin-top:0.2rem;
+				margin-left: 0.3rem;
+				border: none;
+				outline: none;
+				font-size: 0.20rem;
+				color: #333;
+				letter-spacing: 0.02rem;
+				width:4rem;
+				height: 0.6rem;
+				resize: none;
+				overflow-x: hidden;
+				overflow-y: hidden;
+			}
+		</style>
+		<script type="text/javascript" src="js/jquery-1.11.3.js" ></script>
+    <script>
+      //图片上传预览    IE是用了滤镜。
+        function previewImage(file)
+        {
+          var MAXWIDTH  = 90; 
+          var MAXHEIGHT = 90;
+          var div = document.getElementById('preview');
+          if (file.files && file.files[0])
+          {
+              div.innerHTML ='<img id=imghead onclick=$("#previewImg").click()>';
+              var img = document.getElementById('imghead');
+              img.onload = function(){
+                var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+                img.width  =  rect.width;
+                img.height =  rect.height;
+//                 img.style.marginLeft = rect.left+'px';
+                img.style.marginTop = rect.top+'px';
+              }
+              var reader = new FileReader();
+              reader.onload = function(evt){img.src = evt.target.result;}
+              reader.readAsDataURL(file.files[0]);
+          }
+          else //兼容IE
+          {
+            var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+            file.select();
+            var src = document.selection.createRange().text;
+            div.innerHTML = '<img id=imghead>';
+            var img = document.getElementById('imghead');
+            img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+            var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+            status =('rect:'+rect.top+','+rect.left+','+rect.width+','+rect.height);
+            div.innerHTML = "<div id=divhead style='width:"+rect.width+"px;height:"+rect.height+"px;margin-top:"+rect.top+"px;"+sFilter+src+"\"'></div>";
+          }
+        }
+        function zoomSade(){
+        	
+        }
+        function clacImgZoomParam( maxWidth, maxHeight, width, height ){
+            var param = {top:0, left:0, width:width, height:height};
+            if( width>maxWidth || height>maxHeight ){
+                rateWidth = width / maxWidth;
+                rateHeight = height / maxHeight;
+                
+                if( rateWidth > rateHeight ){
+                    param.width =  maxWidth;
+                    param.height = Math.round(height / rateWidth);
+                }else{
+                    param.width = Math.round(width / rateHeight);
+                    param.height = maxHeight;
+                }
+            }
+            param.left = Math.round((maxWidth - param.width) / 2);
+            param.top = Math.round((maxHeight - param.height) / 2);
+            return param;
+        }
+    </script>
+	</head>
+	<body>
+	   <form id="form1" action="#" method="post">
+	   <div class="contain">
+	   	  <header class="head1">如果有车辆停放不当，可通过本服务联系车主挪车。</header>
+	   	  <section class="sec">
+	   	  	<ul>
+	   	  		<li><span>车牌号码</span>
+	   	  			<select>
+	   	  				<option>辽</option>
+	   	  				<option>吉</option>
+	   	  				<option>苏</option>
+	   	  				<option>浙</option>
+	   	  				<option>鲁</option>
+	   	  				<option>豫</option>
+	   	  				<option>鄂</option>
+	   	  				<option>湘</option>
+	   	  				<option>粤</option>
+	   	  				<option>琼</option>
+	   	  				<option>贵</option>
+	   	  				<option>云</option>
+	   	  				<option>渝</option>
+	   	  				<option>皖</option>
+	   	  				<option>新</option>
+	   	  				<option>藏</option>
+	   	  				<option>京</option>
+	   	  				<option>闽</option>
+	   	  				<option>川</option>
+	   	  				<option>甘</option>
+	   	  				<option>宁</option>
+	   	  				<option>蒙</option>
+	   	  				<option>泸</option>
+	   	  				<option>冀</option>
+	   	  				<option>陕</option>
+	   	  			</select>
+	   	  			<select>
+	   	  				<option>A</option>
+	   	  				<option>B</option>
+	   	  				<option>C</option>
+	   	  				<option>D</option>
+	   	  				<option>E</option>
+	   	  				<option>F</option>
+	   	  				<option>G</option>
+	   	  				<option>H</option>
+	   	  				<option>I</option>
+	   	  				<option>J</option>
+	   	  				<option>K</option>
+	   	  				<option>L</option>
+	   	  				<option>M</option>
+	   	  				<option>N</option>
+	   	  				<option>O</option>
+	   	  				<option>P</option>
+	   	  				<option>Q</option>
+	   	  				<option>R</option>
+	   	  				<option>S</option>
+	   	  				<option>T</option>
+	   	  				<option>U</option>
+	   	  				<option>V</option>
+	   	  				<option>W</option>
+	   	  				<option>X</option>
+	   	  				<option>Y</option>
+	   	  				<option>Z</option>
+	   	  			</select>
+	   	  			<input class="carid" id="carid" type="text" name="carnum"  placeholder="填写车牌号" />
+	   	  		</li>
+	   	  		<li><span>车牌颜色</span>
+	   	  			<select class="chepai">
+	   	  				<option>蓝色车牌 &nbsp;( 蓝底白字 )</option>
+	   	  				<option>黄色车牌 &nbsp;( 黄底黑字 )</option>
+	   	  				<option>黑色车牌 &nbsp;( 黑底白字 )</option>
+	   	  			</select>
+	   	  		</li>
+	   	  		<li><span>车辆位置</span>
+	   	  			<input class="cs" id="address" type="text" placeholder="请输入车辆位置" />
+	   	  		</li>
+	   	  	</ul>
+	   	  </section>
+	   	 
+	   	   <header class="head"></header>
+	   	   <section class="sec contents">
+	   	   	<div class="left">
+	   	   	 <div class="top">
+	   	  	 	停放不当说明
+	   	  	 </div>
+	   	  	 <textarea class="text" id="texts" placeholder="车辆停放不当的描述"></textarea>
+	   	   	</div>
+	   	  	 
+	   	  	<div class="photo" id="addCommodityIndex">
+             <!--input-group start-->
+            <div class="input-group row">
+                
+                <div class="col-sm-9 big-photo">
+                	<div id="preview" style="text-align: right;padding-right: 16px;padding-top:20px;">
+                        <img id="imghead" border="0" src="img/xiangji_png.png" style="margin-top:36px;width:0.36rem;" onclick="$('#previewImg').click();">
+                     </div>         
+                    <input class="caijian"  type="file" onchange="previewImage(this)" style="display: none;" id="previewImg">
+                	<!--<input id="uploaderInput" class="uploader__input" style="display: none;" type="file" accept="" multiple="">-->
+                </div>
+            </div>
+            <!--input-group end-->
+			</div>
+	   	  </section>
+	   	  <section class="agree">
+	   	  	<input class="btn" id="btn1" type="button" value="通知车主" />
+	   	  </section>
+		  <div class="modal">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <form id="buy-form">
+                 <div class="tips" id="error"></div>
+            </form>
+			      </div>
+			  </div>
+		  </div>
+		</div>
+	</form>
+	   	  <script>
+	   	  	
+	   	  	//验证车牌号
+	   	  	function carIDcheck(){
+				var cardID=document.getElementById("carid");
+				var reg=/^[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
+				if(!cardID.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+                    document.getElementById("error").innerHTML="车牌号不能为空";
+					return false;   
+				}
+				else if(!reg.test(cardID.value)){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="车牌号格式不正确";
+					return false;
+				}   
+				else{  
+					return true;
+				}
+			}
+	   	  	
+	   	  	//验证车辆位置
+	   	  	function addressCheck(){
+	   	  		var address=document.getElementById("address");
+	   	  		if(!address.value){
+	   	  			document.getElementsByClassName("modal")[0].style.display="block";
+	   	  			document.getElementById("error").innerHTML="车辆位置不能为空!";
+	   	  			return false;
+	   	  		}else{
+	   	  			return true;
+	   	  		}
+	   	  	}
+			
+			
+			//验证停放不当说明
+			function textCheck(){
+				var texts=document.getElementById("texts");
+				if(!texts.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="请填写停放不当说明";
+					return false;
+				}else{
+					return true;
+				}
+			}
+			
+			//验证上传照片
+			function photoCheck(){
+				var previewImg=document.getElementById("previewImg");
+				if(!previewImg.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="请上传车辆照片";
+					return false;
+				}else{
+					return true;
+				}
+			}
+			
+			
+			
+			//点击确认支付按钮触发
+			  btn1.onclick=function(){
+			  	  carIDcheck();
+			  	  addressCheck();
+			  	  textCheck();
+			  	  photoCheck();
+				  setTimeout(function(){
+					document.getElementsByClassName("modal")[0].style.display="none";
+				  },1600);
+				  if( carIDcheck()&&addressCheck()&&textCheck()&&photoCheck()){
+				  	var form1=document.getElementById("form1");
+						form1.submit();
+						btn1.disabled=true;
+			            btn1.style.color="#333";
+			            btn1.style.background="#ccc";
+			            btn1.style.border="none";
+				  }
+			  }
+	   	  </script>
+	</body>
+</html>

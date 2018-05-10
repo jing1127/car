@@ -1,0 +1,76 @@
+@charset "utf-8";
+.loan_jm1{
+	font-size: 0.3rem;
+	background: #fff;
+	color: #333;
+	font-family: inherit;
+	}
+.loan_jm1 li{
+	font-size: 0.22rem;
+	padding:0.28rem;
+	border-bottom: 1px solid #eee;
+}
+.loan_jm_spa1{
+	display:block;
+	float:left;
+	}
+.loan_jm_l1{
+	height:0.3rem;
+	}
+.wbk_srn{
+	height:0.32rem;
+	float:left;
+	margin-left: 0.9rem;
+	color:#20A29D ;
+	}
+.wbk_srn img{
+	width:0.2rem;
+}
+/*城市弹层*/
+.container{
+	width:6.4rem;
+	position:absolute;
+	top:1.2rem;
+	left:0;
+	background-color:#ffffff;
+	z-index:9999;
+	display:none;
+	}
+.container .letter{
+	position:fixed;
+	top:0.36rem;
+	right:0.14rem;
+	width:0.32rem;
+	line-height:0.4rem;
+	font-size:0.22rem;
+	text-align:center;
+	}
+.letter ul{
+	list-style-type:none;
+	}
+.letter ul li a{
+	text-decoration:none;
+	color: #454545;
+	}
+.city{
+	width:5rem;
+	overflow:hidden;
+	padding:0.2rem;
+	font-size: 0.24rem;
+	}
+.city-list{
+	width:6rem;
+	overflow:hidden;
+	}
+.city-list p{
+	padding-bottom: 0.2rem;
+	color:#afafaf;
+	width:6.08rem;
+	height:0.5rem;
+	line-height:50px;
+	border-bottom:1px solid #e8ecf1;
+	cursor:pointer;
+	}
+.UISelect{
+	margin-top:0.05rem;
+	}

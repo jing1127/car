@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>车辆列表</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<link rel="stylesheet" href="css/wzbl.css" />
+
+		<style>
+			.contain{width:100%;}
+			.contain a{text-decoration: none;}
+			.tops span{font-family: "黑体";font-size: 0.26rem;}
+			.main{padding:0;margin-top: -0.2rem;font-size: 0.2rem;}
+			.main ul{padding-top: 0.12rem;border-top:1px solid #ccc;color: #454545;display: flex;width:4rem;}
+			.main li{text-align: center;flex: 4;}
+			.main .one{flex: 5;margin-right: 0.26rem;}
+			.none{padding:4rem 0rem;text-align: center;font-family: "黑体";font-size: 0.36rem;color: #666;line-height: 0.6rem;display: none;}
+			.none img{margin-bottom: 0.2rem;width:1.2rem;}
+			.none span{position: relative;top:0.24rem;left:0.02rem;font-size: 0.5rem;}
+			.addc1{width:88%;height:1.15rem;margin:0 6%;border-bottom: 1px solid #aaa;display: none;}
+			.addc1 img{width:0.5rem;}
+			.addc1 span{position:relative;top:-0.15rem; font-size: 0.24rem;color: #6F6F6F;font-family: "黑体";}
+		</style> 
+		<style>
+	    [v-cloak] {
+			        display: none;
+			    }
+		</style>
+	</head>
+	<body>
+		
+		<div class="contain" v-cloak v-for="itemadd in datalist">
+			<section class="car">
+				<img class="img1" src="img/list/tupian_png.png" />
+				<div class="content">
+					<div class="tops">
+						<span class="span1">{{itemadd.carnum}}</span>
+						<span class="span2">{{itemadd.cartype==01?"大型汽车":(itemadd.cartype==02?"小型汽车":(itemadd.cartype==03?"使馆汽车":(itemadd.cartype==04?"领馆汽车":(itemadd.cartype==05?"境外汽车":(itemadd.cartype==06?"外籍汽车":(itemadd.cartype==07?"两三轮摩托车":(itemadd.cartype==08?"轻便摩托车":(itemadd.cartype==09?"使馆摩托车":(itemadd.cartype==10?"领馆摩托车":(itemadd.cartype==11?"境外摩托车":(itemadd.cartype==12?"外籍摩托车":(itemadd.cartype==13?"农用运输车":(itemadd.cartype==14?"拖拉机":(itemadd.cartype==15?"挂车":(itemadd.cartype==16?"教练汽车":(itemadd.cartype==17?"教练摩托车":(itemadd.cartype==18?"试验汽车":(itemadd.cartype==19?"试验摩托车":(itemadd.cartype==20?"临时入境汽车":(itemadd.cartype==21?"临时入境摩托车":(itemadd.cartype==22?"临时行驶车":(itemadd.cartype==23?"公安警车":"其它车型"))))))))))))))))))))))}}</span>
+						<a href="resetcar.html?merId={{itemadd.merchant}}&carnum={{itemadd.carnum}}"><img class="xiugai" src="img/list/xiugai_png.png" /></a>
+					</div>
+					
+					 <img class="close" src="img/list/chacha_png.png" @click="delCheck($index)" />
+					 <a href="listall.html?merId={{itemadd.merchant}}&carnum={{itemadd.carnum}}&nodispose={{itemadd.nodispose}}">
+					 	<div class="main">
+							<ul>
+								<li class="one">违章(待处理)<div>{{itemadd.nodispose}}</div></li>
+								<li class="two">罚款<div>{{itemadd.money}}</div></li>
+								<li class="two">扣分<div>{{itemadd.score}}</div></li>
+							</ul>
+						</div>
+					 </a>
+					 
+				</div>
+			</section>
+		</div>		
+		<section class="addc1" id="addc1">
+			<img src="img/list/adds.png" />
+			<span>添加车辆</span>
+		</section>
+		<section class="none" id="none">
+				<img id="addc" src="img/add.png" />
+				<div>请先添加车辆哦<span>~</span></div>
+		</section>
+		<script>
+			//获取地址栏
+	    	function UrlSearch()
+				{
+				    var name,value;
+				    var str=location.href; //取得整个地址栏
+				    var num=str.indexOf("?");
+				    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+				    var arr=str.split("&"); //各个参数放到数组里
+				    for(var i=0;i < arr.length;i++){
+				        num=arr[i].indexOf("=");
+				        if(num>0){
+				            name=arr[i].substring(0,num);                  
+				            value=arr[i].substr(num+1);
+				            this[name]=value;
+				        }
+				    }
+				}
+				var Request=new UrlSearch(); //实例化
+				var merId=Request.merId;//获取商户号
+				$.ajax({
+						type:"post",
+						url:"http://116.62.153.14:80/CarMent/carList",
+						
+						data:{
+							"merId":merId
+						},
+						dataType: "json",
+						success:function(data){
+							//alert(JSON.stringify(data.orderList));
+							var car=data.carlist;
+							var merId=data.merId;
+							if(car==0){
+								$("#none").css("display","block");
+								$("#addc").click(function(){
+									location.href="addcar.html?merId="+merId;
+								});
+							}else{
+								$("#addc1").css("display","block");
+								$("#addc1").click(function(){
+									location.href="addcar.html?merId="+merId;
+								});
+								var vmadd = new Vue({
+								el : ".contain",
+								data : {
+									datalist : data.carlist
+								},
+								
+								methods : {
+									delCheck : function(index){
+										var carnum = vmadd.datalist[index].carnum;
+										vmadd.datalist.splice(index,1);
+										$.ajax({
+											type:"post",
+											url:"http://116.62.153.14:80/CarMent/carDelete",
+											data:{
+											"merId":merId,
+											"carnum":carnum
+											},
+											dataType: "json",
+											success:function(data){
+											//alert(JSON.stringify(data.orderList));
+											console.log("删除成功!");
+											//window.location.reload();
+											},
+											error:function(){
+											console.log("操作失败!");
+											}
+										});
+									}
+								}
+								
+							})
+							}
+							return;
+						},
+		          error:function(){
+			          console.log("操作失败!");
+					}
+				})
+				
+				function delCheck(){
+					var carnum=$("#carnum").html();
+					$.ajax({
+							type:"post",
+							url:"http://116.62.153.14:80/CarMent/carDelete",
+							data:{  
+								"merId":merId,
+								"carnum":carnum
+							},
+							dataType: "json",
+							success:function(data){
+								//alert(JSON.stringify(data.orderList));
+								console.log("删除成功!");
+								//window.location.reload();
+							},
+			          error:function(){
+				          console.log("操作失败!");
+						}
+					});
+				}
+		</script>
+	</body>
+</html>

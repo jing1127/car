@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>罚款代缴</title>
+		<script type="text/javascript" src="js/public.js" ></script>
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<link rel="stylesheet" href="css/wxzf.css" />
+		<link rel="stylesheet" href="css/wzbl.css" />
+		<link rel="stylesheet" href="css/modal.css" />
+		<style>
+			.modal {
+			    position: fixed;
+			    left: 0;
+			    right:0;
+			    top: 0;
+			    bottom: 0  ;    
+			    /*background: rgba(0,0,0, .7);*/
+			    z-index: 999;
+			    font-size: 0.26rem;
+			    color: #ccc;
+			    text-align: center;
+			    display: none;
+			}
+			.modal-dialog {
+			    width: 5rem;
+			    margin: 4rem auto;
+			}
+			.modal-content {
+			    background: #222;
+			    border:none;
+			    border-radius: 0.2rem;
+			    padding: 0.22rem 0.18rem;
+			    position: relative;
+			}
+			
+			#qb{
+			    background-color: #EE522A;
+			    color: #fff;
+			}
+			
+			.modal-content a{
+			    position: absolute;
+			    top:0rem;
+			    right: 0.2rem;
+			    font-size: 0.3rem;
+			    color: #ccc;
+			}
+			/*支付*/
+			.mod1{
+				position: fixed;
+				top:0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgb(0,0,0,0.7);
+				z-index: 999;
+			}
+			.mod1-dia{
+			    width: 260px;
+			    margin: 150px auto;
+			}
+			.mod1-con{
+			    background:  #fafafa;  
+			    border-radius: 3px;
+			    padding: 16px;
+			    position: relative;
+			}
+			
+			.mt-content .mon{
+				margin-left: -20px;
+				  background: #fafafa;
+			    box-sizing: border-box;
+			    /*width: 100%;*/
+			    margin: 6px 0;
+			    
+			    border-radius: 2px;
+			    padding: 2px 6px;
+				  width:220px;
+			    /*margin-left: 0.1rem;*/
+			    /*margin-left: 5px;*/
+			    margin-top:-20px;
+			    line-height: 20px;
+			    outline: none;
+			    border: none;
+			    border-bottom: 1px solid #64D364;
+			    color: #000;
+			    font-size: 14px;
+			}
+		</style>
+	</head>
+	<body>
+	   <div class="contain">
+	   	  <header class="head"></header>
+	   	  <section class="sec">
+	   	  	<ul>
+	   	  		<li><span>当前位置</span>
+	   	  			<input class="cs" id="addrid" type="text" />
+	   	  		</li>
+	   	  		<li><span>车牌号码</span>
+	   	  			<input class="cs" id="carid" type="text" placeholder="填写车牌号" />
+	   	  		</li>
+	   	  		<li><span>手机号码</span>
+	   	  			<input class="cs" id="phone" type="text" placeholder="填写手机号" />
+	   	  		</li>
+	   	  		
+	   	  	</ul>
+	   	  </section>
+	   	   <header class="head"></header>
+	   	   <section class="sec">
+	   	  	<ul>
+	   	  		<li>
+	   	  			<span>处罚时间</span>
+	   	  			<input class="cs" id="dates" type="text" placeholder="格式：2017-07-21" />
+	   	  		</li>
+	   	  		<li><span>处罚金额</span>
+	   	  			<input class="cs" id="money" type="text" placeholder="输入处罚金额" />
+	   	  		</li>
+	   	  		<li><span>扣分数量</span>
+	   	  			<input class="cs" id="many" type="text" placeholder="输入扣除多少分" />
+	   	  		</li>
+	   	  		<li><span>违规原因</span>
+	   	  			<input class="cs" id="why" type="text" placeholder="酒驾、超速、狗带" />
+	   	  		</li>
+	   	  		
+	   	  	</ul>
+	   	  </section>
+	   	  <header class="head"></header>
+	   	  <section class="sec">
+	   	  	<ul>
+	   	  		<li><span>服务费</span>
+	   	  			<input class="phone" id="money3" type="text" value="30" readonly="" />
+	   	  		</li>
+	   	  	</ul>
+	   	  </section>
+	   	  <section class="agree">
+	   	  	<img id="no" src="img/yuan_png.png" onclick="selec();" />
+	   	  	<img id="yes" src="img/xuanzhong.png" onclick="selec();" />
+	   	  	<span>已阅读并同意 <a href="agree.html">&nbsp;《授权协议》</a></span></span>
+	   	  	<br /><input class="btn" id="btn1" type="button" value="确认支付" />
+	   	  </section>
+		  <div class="modal">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <form id="buy-form">
+                 <div class="tips" id="error"></div>
+            </form>
+			      </div>
+			  </div>
+		  </div>
+		</div>
+	   	  <script>
+			//获取地址栏
+	    	function UrlSearch()
+				{
+				    var name,value;
+				    var str=location.href; //取得整个地址栏
+				    var num=str.indexOf("?")
+				    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+				    var arr=str.split("&"); //各个参数放到数组里
+				    for(var i=0;i < arr.length;i++){
+				        num=arr[i].indexOf("=");
+				        if(num>0){
+				            name=arr[i].substring(0,num);
+				            value=arr[i].substr(num+1);
+				            this[name]=value;
+				        }
+				    }
+				}
+				var Request=new UrlSearch(); //实例化
+				var merId=Request.merId;//获取商户号
+				$.ajax({
+						type:"post",
+						url:"http://192.168.1.141:8080/CarMent/addressApp",
+						data:{
+							"merId":merId
+						},
+						success:function(data){
+							var address=data.address;
+							$("#addrid").val(address);
+						},
+		          error:function(){
+			          console.log("操作失败！");
+					}
+				})
+		   	//同意授权协议按钮
+		   	function selec(){
+		   		var no=document.getElementById("no");
+		   	  	var yes=document.getElementById("yes");
+		   	  	if(yes.style.display=="block"){
+		   	  		yes.style.display="none";
+		   	  		no.style.display="block";
+		   	  	}else{
+		   	  		yes.style.display="block";
+		   	  		no.style.display="none";
+		   	  	}
+		   	}
+	   	  	
+	   	  	//验证车牌号
+	   	  	var btn1=document.getElementById("btn1");
+	   	  	function carIDcheck(){
+				var cardID=document.getElementById("carid");
+				if(!cardID.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+                    document.getElementById("error").innerHTML="车牌号不能为空!";
+					return false;
+				}
+				else{
+					return true;
+				}
+			}
+	   	  	
+	   	  	//验证手机号
+			function phoneCheck(){
+				var phone=document.getElementById("phone");
+				var phonereg=/^(|1[3578]\d{9})$/;
+				if(!phone.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="手机号不能为空!";
+					return false;
+				}else if(!phonereg.test(phone.value)){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="手机号格式不正确!";
+					return false;
+				}else{
+					return true;
+				}
+			}
+			
+			//验证处罚时间
+			function datesCheck(){
+				var dates=document.getElementById("dates");
+				if(!dates.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="处罚时间不能为空!";
+					return false;
+				}else{
+					return true;
+				}
+			}
+			//验证处罚金额
+			function moneyCheck(){
+				var money=document.getElementById("money");
+				if(!money.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="处罚金额不能为空!";
+					return false;
+				}else{
+					return true;
+				}
+			}
+			
+			//验证扣分数量
+			function manyCheck(){
+				var many=document.getElementById("many");
+				if(!many.value){
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="扣分数量不能为空!";
+					return false;
+				}else{
+					return true;
+				}
+			}
+			function fdjCheck(){
+				var fdj=document.getElementById("fdj");
+			}
+			//验证违规原因
+			function whyCheck(){
+				var why=document.getElementById("why");
+				if(!why.value){    
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="违规原因不能为空!";
+					return false;
+				}else{
+					return true;
+				}
+			}
+			 
+			//验证是否选择同意授权协议
+			function agrees(){
+				var yes=document.getElementById("yes");
+				if(yes.style.display=="block"){
+					return true;
+				}else{
+					document.getElementsByClassName("modal")[0].style.display="block";
+					document.getElementById("error").innerHTML="请阅读《授权协议》";
+					return false;
+				}
+			}
+			function showDialog(){
+				app.showDialog(0,"加载中");
+			}
+			function showDialogerror(){
+				app.showDialog(1,"服务器错误");
+			}
+			function dismissDialog(){
+				app.dismissDialog();   
+			}
+			//点击确认支付按钮触发
+			  btn1.onclick=function(){
+			  	  carIDcheck();
+			  	  phoneCheck();
+			  	  datesCheck();
+			  	  moneyCheck();
+			  	  manyCheck();
+			  	  whyCheck();
+			  	  agrees();
+				  setTimeout(function(){
+					document.getElementsByClassName("modal")[0].style.display="none";
+				  },1600);
+				  if(carIDcheck()&&phoneCheck()&&datesCheck()&&moneyCheck()&&manyCheck()&&whyCheck()&&agrees()){
+				  		var carnum=$("#carid").val();
+						var tel=$("#phone").val();
+						var punishtime=$("#dates").val();
+						var money=$("#money").val();	
+						var score=$("#many").val();
+						var cause=$("#why").val();			
+						var sponaddress=$("#addrid").val();
+						showDialog();
+				  	$.ajax({
+						type:"post",
+						url:"http://192.168.1.141:8080/CarMent/orderAdd",
+						data:{
+							"merId":merId,
+							"sponaddress":sponaddress,
+							"carnum":carnum,
+							"tel":tel,
+							"punishtime":punishtime,
+							"money":money,
+							"score":score,
+							"cause":cause
+						},
+						success:function(data){
+							//var ordernum=data.ordernum;
+							//var moneyall=data.moneyall;
+							//$("#ordernum").html(ordernum);
+							//$("#moneyall").html(moneyall);
+							dismissDialog();
+							console.log("操作成功！");
+							ordernum=data.orderNum;
+							location.href="https://www.baidu.com/pay?ordernum="+ordernum+"&type=3";
+						},
+		          error:function(){
+		          	  showDialogerror();
+			          console.log("操作失败!");
+					}
+					})
+//				  	var modal1=document.getElementById("modal1");
+//					modal1.style.display="block";
+				  }
+			  }
+			  
+	   	  </script>
+	   	  <!--<script type="text/javascript">
+		$(function(){
+			//出现浮动层
+			$(".btnp").click(function(){
+				$(".modal1").hide();
+				$("#pays").show();
+				});
+			//关闭浮动
+			$(".clos").click(function(){
+				$("#pays").hide();
+				$(".modal1").show();
+				});
+				//数字显示隐藏
+				$(".xiaq_tb").click(function(){
+				$(".numb_box").slideUp(500);
+				});
+				$(".mm_box").click(function(){
+				$(".numb_box").slideDown(500);
+				});
+				//----
+				var i = 0;
+				$(".nub_ggg li a").click(function(){
+					i++
+					if(i<6){
+						$(".mm_box li").eq(i-1).addClass("mmdd");
+						}else{
+							$(".mm_box li").eq(i-1).addClass("mmdd"); 
+							setTimeout(function(){
+							location.href="success.html"; 
+							},500);
+							//window.document.location="cg.html"
+					 } 
+				});
+				
+				$(".nub_ggg li .del").click(function(){
+					
+					if(i>0){
+						i--
+						$(".mm_box li").eq(i).removeClass("mmdd");
+						i==0;
+						}
+					//alert(i);		 
+				}); 
+		});
+	</script>-->
+	</body>
+</html>

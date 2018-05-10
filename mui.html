@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>退款订单</title>
+    <link rel="stylesheet" href="mui/mui.min.css">
+    <script type="text/javascript" src="js/public.js" ></script>
+    <script src="mui/mui.min.js"></script>
+    <script src="mui/jquery-3.2.1.js"></script>
+    <script src="mui/vue.min.js"></script>
+    
+    <style>
+        ul{width:100%;list-style: none;}
+        *{margin: 0;padding: 0;}
+	    html{	font-size: 60px;}
+	    a{text-decoration: none;color: #333;}
+	    .order{margin:0 auto;margin-top:0.3rem;	border:1px solid #dedede;box-shadow:0 0 8px #ccc;width:5.8rem;	background: #fff;font-size: 0.22rem;color: #454545;letter-spacing: 0.02rem;}
+		.order .top{display: flex;margin:0.2rem;	padding-bottom: 0.14rem;border-bottom: 1px dashed #ccc;}
+		.top .orderid{	flex: 3;}
+		.top .zhuangtai{flex: 1;text-align: right;color: #20A29D;font-size: 0.2rem;}
+		.list{padding: 0;padding-left: 0.2rem;}
+		.list li{margin-bottom: 0.18rem;}
+		.list .spe{display: flex;margin-right: 0.2rem;border-bottom: 1px dashed #ccc;}
+		.spe div{padding:0;flex: 1;}
+		.spe .con{border: none;text-align: right;color: #FEAC36;}
+		.qp{padding:0rem 0.2rem 0.2rem 0rem;text-align: right;}
+		.yi .btns{border:1px solid #20A29D;border-radius: 0.08rem;width:1.4rem;height: 0.34rem;font-size: 0.22rem;background: #fff;color: #20A29D;padding:0.02rem 0.16rem;}
+		.more{display: flex;padding-top:0.02rem;padding-left: 0.2rem;}
+		.left{	flex: 1; }
+		.left img{margin-right: 0.1rem;width:0.28rem; }
+		.left span{position: relative;top:-0.04rem;}
+		.qb{flex: 1;position: relative;}
+		.none{padding-top: 2.5rem;text-align: center;display: none;}
+		.none img{width:2.4rem;}
+
+    </style>
+    <style>
+	    [v-cloak] {
+			        display: none;
+			    }
+	</style>
+</head>
+<body>
+    <div class="index_box">
+        <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+            <div class="mui-scroll">
+              <ul class="mui-table-view-chevron">
+              	<li class="contain" v-cloak v-for="info in infos">
+              	  <div class="order">
+			     	<section class="top">
+			     		<header class="orderid">订单编号：<span>{{info.ordernum}}</span></header>
+			     	</section>
+			     		<section class="list">
+			     		<ul>
+			     			<li>下单时间：<span>{{info.starttime}}</span></li>
+			     			<li>违规原因：<span>{{info.cause}}</span></li>
+			     			<li class="spe">
+			     				<div>扣除分值：<span>{{info.score}}</span></div>
+			     				<div class="con">
+			     					退款金额：￥<span>{{info.moneyall}}</span>
+			     				</div>
+			     			</li>
+			     		</ul>
+			     	</section>
+			     	<section class="more">
+			     		<div class="left">
+			     			<img src="img/tui.png" /><span>退款成功</span>
+			     		</div>
+			     		<section class="qp">
+			     			<div class="yi">
+			     				<a href="see.html?ordernum={{info.ordernum}}"><input class="btns" type="button" value="查看详情" /></a>
+			     			</div>
+			     		</section>
+			     	</section>
+	     		  </div>
+              	</li>
+                
+              </ul>
+            </div>
+          </div>
+    </div>
+    <section class="none" id="none">
+				<img src="img/order.png" /> 
+	</section>  
+    <script>
+      //获取地址栏
+	    	function UrlSearch()
+				{
+				    var name,value;
+				    var str=location.href; //取得整个地址栏
+				    var num=str.indexOf("?")
+				    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+				    var arr=str.split("&"); //各个参数放到数组里
+				    for(var i=0;i < arr.length;i++){
+				        num=arr[i].indexOf("=");
+				        if(num>0){
+				            name=arr[i].substring(0,num);
+				            value=arr[i].substr(num+1);
+				            this[name]=value;
+				        }
+				    }
+				}
+				var Request=new UrlSearch(); //实例化
+				var merId=Request.merId;//获取商户号	
+      $(function(){
+      	var lastIndex=0;
+         var vm=new Vue({
+             el:".index_box",
+             data:{
+                 infos:[],
+             }
+         });
+        mui.init({
+            swipeBack: false,
+            pullRefresh:{
+                container:"#refreshContainer",
+                down:{
+                    style:"circle",
+                    callback:pulldownRefresh
+                },
+                up:{
+                	auto:false,
+                    height:"50px",
+                    contentrefresh:"正在加载...",
+                    contenttnomore:"没有更多数据了",
+                    callback:pullupRefresh
+                }
+            }
+        });
+        function pulldownRefresh(){
+            $.ajax({
+                url:"http://192.168.2.174:8080/ssm/RefundList",
+                data:{
+                    merId:merId,
+                    id: 0
+                },
+                type:"POST",
+                dataType:"json",
+                success:function(data){ 	
+                
+                    vm.infos=data.refundList;
+                    lastIndex = vm.infos[vm.infos.length-1].id;
+			        console.log("id为："+ JSON.stringify(vm.infos[vm.infos.length-1].id));
+                	}
+            });  
+            mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+            mui.toast('下拉刷新成功');
+            mui('#refreshContainer').pullRefresh().refresh(true);
+        };
+        function pullupRefresh(){//http:192.168.2.174:8080/ssm/RefundList
+            $.ajax({
+                url:"http://192.168.2.174:8080/ssm/RefundList",
+                type:"POST",
+                data:{
+                	merId:merId,
+                    id:lastIndex
+                },
+                dataType:"json",
+                success:function(data){
+                	
+                		vm.infos=vm.infos.concat(data.refundList);
+                    lastIndex = vm.infos[vm.infos.length-1].id;
+			        console.log("id为："+ JSON.stringify(vm.infos[vm.infos.length-1].id));
+                    if(data.refundList<5){
+                        // this.endPullupToRefresh(true);
+                        mui('#refreshContainer').pullRefresh().endPullupToRefresh(true);
+                    }else{
+                        // this.endPullupToRefresh(false);
+                        mui('#refreshContainer').pullRefresh().endPullupToRefresh(false);
+              
+                	}
+                    
+                }
+            });
+
+        };
+          $(".index_box").ready(function(){
+          	console.log("12");
+              $.ajax({
+                  url:"http://192.168.2.174:8080/ssm/RefundList",
+                  type:"POST",
+                  data:{
+                  	merId:merId,
+                  	id:0
+                  },
+                  dataType:"json",
+                  success:function(data){
+                  	if(data.refundList==0){
+                		$("#none").css("display","block");
+                		$(".index_box").css("display","none");
+                	}else{
+                      vm.infos=data.refundList;
+                       lastIndex = vm.infos[vm.infos.length-1].id;
+                      }
+                  }
+              });
+          });
+      });
+    </script>
+</body>
+</html>

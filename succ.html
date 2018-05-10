@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>回执上传</title>
+    <script type="text/javascript" src="js/public.js" ></script>
+    <script type="text/javascript" src="js/jquery-1.11.3.js" ></script>
+    <link rel="stylesheet" href="css/wzbl.css" />
+    <style>
+    	*{
+		  	margin: 0;
+		  	padding: 0;
+		  }
+		  html{
+		  	font-size: 60px;
+		  }
+		  body{
+		  	background: #F4F4F4;
+		  }
+		.contain{
+			padding-top:0.3rem;
+			text-align: center;
+		}
+    	.contain .out{
+    		margin:0 auto;
+    		margin-bottom: 0.26rem;
+    		padding-top:1rem;
+    		background: #fff;
+    		width:5.8rem;
+    		height: 2.3rem;
+    		border: 1px dashed #ccc;
+    		border-radius: 0.1rem;
+    		text-align: center;
+    	}
+    	.out{
+    		width:5.6rem;
+    		height:2rem;
+    	}
+    	.out img{
+    		width:1.2rem;
+    	}
+    	.btnpho{
+    		margin-top: 1rem;
+    		background: #20A29D;
+    		border: none;
+    		border-radius: 0.1rem;
+    		font-size: 0.34rem;
+    		font-family: "黑体";
+    		letter-spacing: 0.1rem;
+    		width:5.2rem;
+    		height: 0.66rem;
+    		color: #fdfdfd;
+    	}
+
+    </style>
+    <script>
+      //图片上传预览    IE是用了滤镜。
+        function previewImage(file)
+        {
+          var MAXWIDTH  = 90; 
+          var MAXHEIGHT = 90;
+          var div = document.getElementById('preview');
+          if (file.files && file.files[0])
+          {
+              div.innerHTML ='<img id=imghead onclick=$("#previewImg").click()>';
+              var img = document.getElementById('imghead');
+              img.onload = function(){
+                var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+                img.width  =  rect.width;
+                img.height =  rect.height;
+				//img.style.marginLeft = rect.left+'px';
+                img.style.marginTop = rect.top+'px';
+              }
+              var reader = new FileReader();
+              reader.onload = function(evt){img.src = evt.target.result;}
+              reader.readAsDataURL(file.files[0]);
+          }
+          else //兼容IE
+          {
+            var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+            file.select();
+            var src = document.selection.createRange().text;
+            div.innerHTML = '<img id=imghead>';
+            var img = document.getElementById('imghead');
+            img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+            var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+            status =('rect:'+rect.top+','+rect.left+','+rect.width+','+rect.height);
+            div.innerHTML = "<div id=divhead style='width:"+rect.width+"px;height:"+rect.height+"px;margin-top:"+rect.top+"px;"+sFilter+src+"\"'></div>";
+          }
+        }
+        function previewImage1(file)
+        {
+          var MAXWIDTH  = 90; 
+          var MAXHEIGHT = 90;
+          var div = document.getElementById('preview1');
+          if (file.files && file.files[0])
+          {
+              div.innerHTML ='<img id=imghead1 onclick=$("#previewImg1").click()>';
+              var img1 = document.getElementById('imghead1');
+              img1.onload = function(){
+                var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img1.offsetWidth, img1.offsetHeight);
+                img1.width  =  rect.width;
+                img1.height =  rect.height;
+				//img.style.marginLeft = rect.left+'px';
+                img1.style.marginTop = rect.top+'px';
+              }
+              var reader = new FileReader();
+              reader.onload = function(evt){img1.src = evt.target.result;}
+              reader.readAsDataURL(file.files[0]);
+          }
+          else //兼容IE
+          {
+            var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+            file.select();
+            var src = document.selection.createRange().text;
+            div.innerHTML = '<img id=imghead1>';
+            var img1 = document.getElementById('imghead1');
+            img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+            var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+            status =('rect:'+rect.top+','+rect.left+','+rect.width+','+rect.height);
+            div.innerHTML = "<div id=divhead1 style='width:"+rect.width+"px;height:"+rect.height+"px;margin-top:"+rect.top+"px;"+sFilter+src+"\"'></div>";
+          }
+        }
+        function clacImgZoomParam( maxWidth, maxHeight, width, height ){
+            var param = {top:0, left:0, width:width, height:height};
+            if( width>maxWidth || height>maxHeight ){
+                rateWidth = width / maxWidth;
+                rateHeight = height / maxHeight;
+                
+                if( rateWidth > rateHeight ){
+                    param.width =  maxWidth;
+                    param.height = Math.round(height / rateWidth);
+                }else{
+                    param.width = Math.round(width / rateHeight);
+                    param.height = maxHeight;
+                }
+            }
+            param.left = Math.round((maxWidth - param.width) / 2);
+            param.top = Math.round((maxHeight - param.height) / 2);
+            return param;
+        }
+    </script>
+</head>
+<body>
+	<form id="form1" action="http://192.168.1.141:8080/CarMent/orderUpload?ordernum=20170713165635" enctype="multipart/form-data" method="post" >
+		<div class="contain">
+    	<div class="out">
+            <div id="preview" class="imgs">
+                <img id="imghead" border="0" src="img/photo1.png"  onclick="$('#previewImg').click();">
+            </div>         
+            <input type="file" name="file1" onchange="previewImage(this)" style="display: none;" id="previewImg" />  
+        </div>
+        <div class="out">
+            <div id="preview1" class="imgs">
+                <img id="imghead1" border="0" src="img/photo2.png" style="width:1.6rem;" onclick="$('#previewImg1').click();">
+            </div>         
+            <input type="file" name="file2" onchange="previewImage1(this)" style="display: none;" id="previewImg1" />  
+        	<input type="hidden" id="merId" name="merId" />
+        	<input type="hidden" id="ordernum" name="ordernum" />
+        </div>
+        <input id="btn" class="btnpho" type="button" value="上传" />  
+    </div>
+	</form>
+	
+	<script>
+		//获取地址栏
+    	function UrlSearch()
+			{
+			    var name,value;
+			    var str=location.href; //取得整个地址栏
+			    var num=str.indexOf("?")
+			    str=str.substr(num+1); //取得所有参数   stringvar.substr(start [, length ]
+			    var arr=str.split("&"); //各个参数放到数组里
+			    for(var i=0;i < arr.length;i++){
+			        num=arr[i].indexOf("=");
+			        if(num>0){
+			            name=arr[i].substring(0,num);
+			            value=arr[i].substr(num+1);
+			            this[name]=value;
+			        }
+			    }
+			}
+			var Request=new UrlSearch(); //实例化
+			var merId=Request.merId;//获取商户号
+			var ordernum=Request.ordernum;
+			$("#merId").val(merId);
+			$("#ordernum").val(ordernum);
+			$("#btn").click(function(){
+						form1.submit();
+						$("#btn").attr("disabled","disabled");
+		        $(".success").css("display","block");
+		        console.log("上传成功!");
+    	})
+			
+	</script>
+</body>
+</html>
